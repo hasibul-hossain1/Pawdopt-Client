@@ -35,10 +35,10 @@ const icons=[
 function PetCategories() {
   return (
     <Section>
-        <h2>Explore Pet Categories</h2>
+        <h2 data-aos="slide-right">Explore Pet Categories</h2>
         <Divider/>
         <div className='mt-10 xs:justify-items-center sm:justify-items-start gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
-        {icons.map((items,index)=><CategoryCard key={index} icon={items.icon} iconName={items.iconName}/>)}
+        {icons.map((items,index)=><CategoryCard aos="slide-right" key={index} icon={items.icon} iconName={items.iconName}/>)}
         </div>
     </Section>
   )

@@ -9,7 +9,7 @@ import CtaCard from "./CtaCard";
 function CallToAction() {
   return (
     <Section>
-      <h2>Every Pet Deserves a Home</h2>
+      <h2 data-aos="slide-right">Every Pet Deserves a Home</h2>
       <Divider />
       <div className="">
         <CtaCard

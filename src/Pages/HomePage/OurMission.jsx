@@ -1,40 +1,39 @@
 import Divider from "@/Shared/Divider";
 import Section from "@/Shared/Section";
-import React from "react";
+import React, { useEffect } from "react";
 import Masonry from "./Masonary/Masonry";
 
 const items = [
   { id: "11", img: "/misson/11.jpeg", height: 410 },
-  { id: "12", img: "/misson/12.jpeg", height: 340 },
   { id: "13", img: "/misson/13.jpeg", height: 390 },
-  { id: "14", img: "/misson/14.jpeg", height: 320 },
-  { id: "15", img: "/misson/15.jpeg", height: 430 },
+  { id: "14", img: "/misson/14.jpeg", height: 520 },
   { id: "16", img: "/misson/16.jpeg", height: 310 },
-  { id: "17", img: "/misson/17.jpeg", height: 460 },
-  { id: "18", img: "/misson/18.jpeg", height: 370 },
-  { id: "19", img: "/misson/19.jpeg", height: 480 },
   { id: "20", img: "/misson/20.jpg", height: 350 },
 ].sort(() => Math.random() - 0.5);
 
-
-
 function OurMission() {
+
+  useEffect(()=>{
+    const random=Math.floor(Math.random()*items.length)
+    items[random].height=600
+  },[])
+
   return (
     <Section>
-      <h2>Our Mission</h2>
+      <h2 data-aos="slide-right">Our Mission</h2>
       <Divider />
       <div className="flex flex-col gap-10 lg:gap-20 items-center mt-10">
-        <Masonry
-          items={items}
-          ease="power3.out"
-          duration={0.6}
-          stagger={0.05}
-          animateFrom="bottom"
-          scaleOnHover={true}
-          hoverScale={0.95}
-          blurToFocus={true}
-          colorShiftOnHover={false}
-        />
+          <Masonry
+            items={items}
+            ease="power3.out"
+            duration={0.6}
+            stagger={0.05}
+            animateFrom="bottom"
+            scaleOnHover={true}
+            hoverScale={0.95}
+            blurToFocus={true}
+            colorShiftOnHover={false}
+          />
         <div>
           <p className="text-lg md:text-xl leading-relaxed">
             At{" "}
