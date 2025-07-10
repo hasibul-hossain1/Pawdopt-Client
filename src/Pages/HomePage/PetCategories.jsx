@@ -2,6 +2,7 @@ import Section from '@/Shared/Section'
 import React from 'react'
 import CategoryCard from './CategoryCard'
 import { Dog,Cat,Rabbit,Bird, Fish, Rat } from 'lucide-react'
+import Divider from '@/Shared/Divider'
 
 const icons=[
   {
@@ -35,8 +36,9 @@ function PetCategories() {
   return (
     <Section>
         <h2>Explore Pet Categories</h2>
-        <div className='mt-5 xs:justify-items-center sm:justify-items-start gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
-        {icons.map((items)=><CategoryCard icon={items.icon} iconName={items.iconName}/>)}
+        <Divider/>
+        <div className='mt-10 xs:justify-items-center sm:justify-items-start gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
+        {icons.map((items,index)=><CategoryCard key={index} icon={items.icon} iconName={items.iconName}/>)}
         </div>
     </Section>
   )

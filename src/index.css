@@ -56,7 +56,7 @@
   --primary: oklch(85.2% 0.199 91.936);
   --primary-foreground: oklch(94.8% 0.028 342.258);
   --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  --secondary-foreground: oklch(27.9% 0.041 260.031);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(70.4% 0.04 256.788);
@@ -125,13 +125,21 @@
 
 
 h1,h2,h3,h4,h5,h6{
-  @apply font-play
+  @apply font-play text-secondary-foreground
 }
 
 h2{
-  @apply text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-bold text-secondary-foreground
+  @apply text-4xl text-center sm:text-left mb-8 md:text-4xl lg:text-5xl font-bold
 }
 
 h4{
-  @apply text-4xl font-bold
+  @apply text-2xl lg:text-4xl font-bold 
+}
+
+h3{
+  @apply text-2xl md:text-3xl lg:text-3xl font-bold
+}
+
+p{
+  @apply text-xs lg:text-base
 }
