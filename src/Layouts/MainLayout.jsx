@@ -17,7 +17,7 @@ function MainLayout() {
   return (
     <>
       <Navbar />
-      {location.pathname && <Carousel />}
+      {location.pathname === '/' && <Carousel />}
       <main className="px-4 sm:px-6 lg:px-8">
         <Outlet />
       </main>

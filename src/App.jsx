@@ -1,15 +1,16 @@
 import { RouterProvider } from "react-router";
 import { router } from "./router/router";
-import { ThemeProvider } from "./components/ThemeProvider";
+import { ThemeProvider } from "./Providers/ThemeProvider";
+import AuthProvider from "./Providers/AuthProvider";
 
 function App() {
- 
-
   return (
     <ThemeProvider>
-      <div className="w-full max-w-[1600px] mx-auto px-4">
-        <RouterProvider router={router} />
-      </div>
+      <AuthProvider>
+        <div className="w-full max-w-[1600px] mx-auto">
+          <RouterProvider router={router} />
+        </div>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

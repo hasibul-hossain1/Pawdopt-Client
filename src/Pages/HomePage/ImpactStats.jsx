@@ -16,13 +16,12 @@ export default function ImpactStats() {
       <Divider />
       <div className="grid grid-cols-2 md:grid-cols-4 mt-10 gap-6 max-w-6xl mx-auto">
         {stats.map((stat, index) => (
-          <Card key={index} className="text-center">
+          <Card key={index} className="bg-card text-center">
             <CardContent className="py-8">
               <div className="text-4xl font-bold text-secondary-foreground">
                <div className="mb-2">{stat.emo}</div>
                 <CountUp
                   from={0}
-
                   separator=","
                   direction="up"
                   duration={2}

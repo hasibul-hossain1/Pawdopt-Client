@@ -3,11 +3,12 @@ import React from "react";
 import Logo from "./Logo";
 import { Menu } from "lucide-react";
 import { ModeToggle } from "./MoodToggle";
+import { Link } from "react-router";
 
 function Navbar() {
   const navigators = (
     <>
-      <a href="/adopt" className="hover:text-primary transition-colors">
+      <a href="/" className="hover:text-primary transition-colors">
         Home
       </a>
       <a href="/about" className="hover:text-primary transition-colors">
@@ -29,8 +30,8 @@ function Navbar() {
           {navigators}
         </div>
         <div className="flex items-center gap-2">
-          <Button>Login</Button>
-          <Button variant="outline">Register</Button>
+          <Link to='/login'><Button>Login</Button></Link>
+          <Link to='/register'><Button variant="outline">Register</Button></Link>
           <ModeToggle/>
         </div>
       </div>
