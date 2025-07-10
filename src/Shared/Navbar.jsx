@@ -19,7 +19,7 @@ function Navbar() {
     </>
   );
   return (
-    <nav className="w-full bg-accent rounded-sm shadow-sm">
+    <nav className="w-full bg-accent rounded-sm shadow-sm sticky top-0 z-50">
       <div className="mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div className="flex justify-center gap-2 items-center">
           <Menu className="md:hidden" />

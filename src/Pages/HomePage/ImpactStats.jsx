@@ -11,7 +11,7 @@ const stats = [
 
 export default function ImpactStats() {
   return (
-    <section className="py-16 bg-muted text-center">
+    <section className="py-16 text-center">
       <h2 data-aos="slide-right">Our Impact So Far</h2>
       <Divider />
       <div className="grid grid-cols-2 md:grid-cols-4 mt-10 gap-6 max-w-6xl mx-auto">
