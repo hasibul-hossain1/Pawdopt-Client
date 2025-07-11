@@ -12,47 +12,66 @@ import axios from "axios";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-
 function Register() {
   const lottieRef = useRef();
-  const imageRef=useRef()
-  const [imageURL, setImageURL] = useState('');
+  const imageRef = useRef();
+  const [imageURL, setImageURL] = useState("");
   const [progress, setProgress] = useState(0);
+  const [imageError,setImageError]=useState('')
+  const [firebaseError,setFirebaseError]=useState('')
+
   const formik = useFormik({
     initialValues: {
       displayName: "",
       email: "",
       password: "",
     },
-    validate:(values)=>{
-      const errors={}
-      if (!/^[a-z]{1,25}$/i.test(values.displayName))return errors.displayName= 'Invalid name'
-      if(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i .test(values.email))return errors.email="Invalid email"
-      if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}$/.test(values.password)) return errors.password="Invalid password must use one lower case one upper case and one number and at least 6 character"
+    validate: (values) => {
+      const errors = {};
+      console.log(errors);
+      if (!/^[a-z]+(?:\s[a-z]+)*$/i.test(values.displayName))
+        (errors.displayName = "Invalid name");
+      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email))
+        (errors.email = "Invalid email");
+      if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}$/.test(values.password))
+        (errors.password =
+          "Invalid password must use one lower case one upper case and one number and at least 6 character");
+          return errors
     },
     onSubmit: (values, { resetForm }) => {
+      if (!imageRef.current.value) {
+        setImageError("You have to upload the image")
+        return
+      }
+      if (!imageURL) {
+        setImageError("Image Upload Failed")
+        return
+      }
       createUser(values.email, values.password)
         .then((res) => {
           if (res) {
+            setFirebaseError('')
             updateProfileUser({
               displayName: values.displayName,
               photoURL: imageURL || "",
             })
-              .then(() => {})
-              .catch((err) => console.log(err));
+              .then(() => {setFirebaseError('')})
+              .catch((err)=>setFirebaseError(err?.message || "Invalid auth Error"));
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => setFirebaseError(err?.message || "Invalid auth Error"));
       resetForm();
       if (imageRef.current.value || imageURL) {
-        imageRef.current.value=''
-        setImageURL('')
+        imageRef.current.value = "";
+        setImageURL("");
+        setImageError("")
       }
     },
   });
 
   const handleImage = async (e) => {
-    setProgress(33)
+    setProgress(33);
+    setImageURL('')
     const file = e.target.files[0];
     if (!file) {
       alert("No file detected");
@@ -61,7 +80,7 @@ function Register() {
     formData.append("file", file);
     formData.append("upload_preset", "my_unsigned_preset");
     formData.append("cloud_name", "dzwfjw6ri");
-    setProgress(80)
+    setProgress(80);
     try {
       const res = await axios.post(
         "https://api.cloudinary.com/v1_1/dzwfjw6ri/image/upload",
@@ -69,16 +88,16 @@ function Register() {
       );
       const result = res.data.url;
       setImageURL(result);
-      setProgress(100)
+      setProgress(100);
     } catch (error) {
       console.error(error);
     }
-    setProgress(0)
+    setProgress(0);
   };
 
   useEffect(() => {
     if (lottieRef.current) {
-      lottieRef.current.setSpeed(0.2); 
+      lottieRef.current.setSpeed(0.2);
     }
   }, []);
 
@@ -95,18 +114,30 @@ function Register() {
               type="text"
               value={formik.values.displayName}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               name="displayName"
               placeholder="Your name"
             />
-            {formik.touched.displayName && formik.errors.displayName &&    <div className="text-red-500 text-sm">{formik.errors.name}</div>}
+            {formik.touched.displayName && formik.errors.displayName && (
+              <div className="text-red-500 text-sm">{formik.errors.displayName}</div>
+            )}
           </div>
           <div className="grid w-full max-w-sm items-center gap-3">
             <Label>Photo</Label>
-            {imageURL&&<Avatar className="size-12 rounded-lg">
-          <AvatarImage src={imageURL} />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>}
-            {progress===0?'':<><span>Uploading...</span><Progress value={progress} className="w-[60%]" /></> }
+            {imageURL && (
+              <Avatar className="size-12 rounded-lg">
+                <AvatarImage src={imageURL} />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            )}
+            {progress === 0 ? (
+              ""
+            ) : (
+              <>
+                <span>Uploading...</span>
+                <Progress value={progress} className="w-[60%]" />
+              </>
+            )}
             <Input
               onChange={handleImage}
               ref={imageRef}
@@ -114,6 +145,7 @@ function Register() {
               name="photoURL"
               placeholder="Your name"
             />
+            {imageError &&<div className="text-red-500 text-sm">{imageError}</div> }
           </div>
           <div className="grid w-full max-w-sm items-center gap-3">
             <Label>Email</Label>
@@ -122,21 +154,30 @@ function Register() {
               onChange={formik.handleChange}
               type="email"
               name="email"
+              onBlur={formik.handleBlur}
               placeholder="your-mail@example.com"
             />
+             {formik.touched.email && formik.errors.email && (
+              <div className="text-red-500 text-sm">{formik.errors.email}</div>
+            )}
           </div>
           <div className="grid w-full mt-4 max-w-sm items-center gap-3">
             <Label>Password</Label>
             <Input
               value={formik.values.password}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               type="password"
               name="password"
               placeholder="Your password"
             />
+             {formik.touched.password && formik.errors.password && (
+              <div className="text-red-500 text-sm">{formik.errors.password}</div>
+            )}
           </div>
           <div className="grid w-full mt-4 max_w-sm items-center gap-3">
             <Button type="submit">Register</Button>
+            {firebaseError && <div className="text-red-500 text-sm">{firebaseError}</div>}
           </div>
         </form>
       </Card>
