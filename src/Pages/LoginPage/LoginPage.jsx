@@ -3,12 +3,29 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Divider from "@/Shared/Divider";
 import { Label } from "@radix-ui/react-dropdown-menu";
-import React from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import Lottie from "lottie-react";
 import lot from '../../assets/2.json'
+import {createUserWithGoogle} from '../../../firebase/firebasePanel'
+import { api } from "@/lib/api";
+
+
 
 function LoginPage() {
+
+ const handleGoogleLogin = async() => {
+    try {
+    const data=await createUserWithGoogle();
+    const user=data.user
+    const res=await api.post('/users',{name:user.displayName,email:user.email})
+    const result=await res.data
+    console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   return (
     <section className="flex justify-center items-center h-screen">
       <Card className="p-8 rounded-lg" data-aos="slide-right">
@@ -16,7 +33,7 @@ function LoginPage() {
           <h4 className="mb-4">Login With</h4>
 
           <div className="flex justify-around flex-col sm:flex-row">
-            <Button variant="ghost" className="border">
+            <Button type="button" onClick={handleGoogleLogin} variant="ghost" className="border">
                 <FaGoogle/>
               Google
             </Button>
@@ -43,5 +60,7 @@ function LoginPage() {
     </section>
   );
 }
+
+
 
 export default LoginPage;

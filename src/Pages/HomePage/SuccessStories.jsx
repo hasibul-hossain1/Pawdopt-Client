@@ -41,12 +41,12 @@ function SuccessStories() {
               />
               <CardTitle>{story.title}</CardTitle>
             </h3>
-            <p className="flex-grow">
+            <div className="flex-grow">
               <CardDescription>{story.text}</CardDescription>
-            </p>
-            <p>
+            </div>
+            <div>
               <p className="text-sm text-muted-foreground">{story.callToAction}</p>
-            </p>
+            </div>
           </div>
         ))}
       </div>

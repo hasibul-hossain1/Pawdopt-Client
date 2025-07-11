@@ -7,12 +7,14 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
+
 import { auth } from "./firebase.init";
 
 export const createUserWithGoogle = () => {
   const provider = new GoogleAuthProvider();
   return signInWithPopup(auth, provider);
 };
+
 export const createUser = (email, password) => {
   return createUserWithEmailAndPassword(auth, email, password);
 };

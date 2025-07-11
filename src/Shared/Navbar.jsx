@@ -4,8 +4,44 @@ import Logo from "./Logo";
 import { Menu } from "lucide-react";
 import { ModeToggle } from "./MoodToggle";
 import { Link } from "react-router";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {signOUtUser} from '../../firebase/firebasePanel'
+import { useAuth } from "@/hooks/Auth";
 
 function Navbar() {
+  const currentUser = useAuth();
+  console.log(currentUser);
+
+  const status = currentUser.data ? (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <Avatar className="size-12">
+          <AvatarImage src={currentUser.data.photoURL||"https://github.com/shadcn.png"} />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem>Dashboard</DropdownMenuItem>
+        <DropdownMenuItem onClick={()=>signOUtUser()}>Logout</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ) : (
+    <>
+      <Link to="/login">
+        <Button>Login</Button>
+      </Link>
+      <Link to="/register">
+        <Button variant="outline">Register</Button>
+      </Link>
+    </>
+  );
+
   const navigators = (
     <>
       <a href="/" className="hover:text-primary transition-colors">
@@ -30,9 +66,8 @@ function Navbar() {
           {navigators}
         </div>
         <div className="flex items-center gap-2">
-          <Link to='/login'><Button>Login</Button></Link>
-          <Link to='/register'><Button variant="outline">Register</Button></Link>
-          <ModeToggle/>
+          {status}
+          <ModeToggle />
         </div>
       </div>
     </nav>
