@@ -3,7 +3,7 @@ import React from "react";
 import Logo from "./Logo";
 import { Menu } from "lucide-react";
 import { ModeToggle } from "./MoodToggle";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -16,8 +16,6 @@ import { useAuth } from "@/hooks/Auth";
 
 function Navbar() {
   const currentUser = useAuth();
-  console.log(currentUser);
-
   const status = currentUser.data ? (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -27,7 +25,7 @@ function Navbar() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>Dashboard</DropdownMenuItem>
+        <DropdownMenuItem><Link to='/dashboard'>Dashboard</Link></DropdownMenuItem>
         <DropdownMenuItem onClick={()=>signOUtUser()}>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -44,12 +42,12 @@ function Navbar() {
 
   const navigators = (
     <>
-      <a href="/" className="hover:text-primary transition-colors">
+      <NavLink to='/' className="hover:text-primary transition-colors">
         Home
-      </a>
-      <a href="/about" className="hover:text-primary transition-colors">
+      </NavLink>
+      <NavLink to='/pet-list' className="hover:text-primary transition-colors">
         Pet Listing
-      </a>
+      </NavLink>
       <a href="/contact" className="hover:text-primary transition-colors">
         Donation Campaigns
       </a>

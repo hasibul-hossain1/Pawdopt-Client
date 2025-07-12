@@ -11,14 +11,15 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { api } from "@/lib/api";
 
 function Register() {
   const lottieRef = useRef();
   const imageRef = useRef();
   const [imageURL, setImageURL] = useState("");
   const [progress, setProgress] = useState(0);
-  const [imageError,setImageError]=useState('')
-  const [firebaseError,setFirebaseError]=useState('')
+  const [imageError, setImageError] = useState("");
+  const [firebaseError, setFirebaseError] = useState("");
 
   const formik = useFormik({
     initialValues: {
@@ -28,50 +29,56 @@ function Register() {
     },
     validate: (values) => {
       const errors = {};
-      console.log(errors);
       if (!/^[a-z]+(?:\s[a-z]+)*$/i.test(values.displayName))
-        (errors.displayName = "Invalid name");
+        errors.displayName = "Invalid name";
       if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email))
-        (errors.email = "Invalid email");
+        errors.email = "Invalid email";
       if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}$/.test(values.password))
-        (errors.password =
-          "Invalid password must use one lower case one upper case and one number and at least 6 character");
-          return errors
+        errors.password =
+          "Invalid password. must use one lowercase one uppercase and one number and at least 6 character";
+      return errors;
     },
     onSubmit: (values, { resetForm }) => {
       if (!imageRef.current.value) {
-        setImageError("You have to upload the image")
-        return
+        setImageError("You have to upload the image");
+        return;
       }
       if (!imageURL) {
-        setImageError("Image Upload Failed")
-        return
+        setImageError("Image Upload Failed");
+        return;
       }
       createUser(values.email, values.password)
         .then((res) => {
           if (res) {
-            setFirebaseError('')
+            setFirebaseError("");
             updateProfileUser({
               displayName: values.displayName,
               photoURL: imageURL || "",
-            })
-              .then(() => {setFirebaseError('')})
-              .catch((err)=>setFirebaseError(err?.message || "Invalid auth Error"));
+            });
           }
+        })
+        .then(() => {
+          api
+            .post("/users", {
+              name: values.displayName,
+              email: values.email,
+            })
+            .then((res) => console.log(res.data))
+            .catch((err) => console.log(err));
         })
         .catch((err) => setFirebaseError(err?.message || "Invalid auth Error"));
       resetForm();
       if (imageRef.current.value || imageURL) {
         imageRef.current.value = "";
         setImageURL("");
-        setImageError("")
+        setImageError("");
       }
     },
   });
 
   const handleImage = async (e) => {
     setProgress(33);
-    setImageURL('')
+    setImageURL("");
     const file = e.target.files[0];
     if (!file) {
       alert("No file detected");
@@ -102,8 +109,8 @@ function Register() {
   }, []);
 
   return (
-    <section className="flex justify-center items-center h-screen">
-      <Card className="p-8 rounded-lg" data-aos="slide-right">
+    <section className="flex flex-col-reverse md:flex-row justify-center items-center h-screen">
+      <Card className="p-8 rounded-lg w-full max-w-md" data-aos="slide-right">
         <form onSubmit={formik.handleSubmit}>
           <h4 className="mb-4">Create An Account</h4>
 
@@ -111,6 +118,7 @@ function Register() {
           <div className="grid w-full max-w-sm items-center gap-3">
             <Label>Name</Label>
             <Input
+              required
               type="text"
               value={formik.values.displayName}
               onChange={formik.handleChange}
@@ -119,7 +127,9 @@ function Register() {
               placeholder="Your name"
             />
             {formik.touched.displayName && formik.errors.displayName && (
-              <div className="text-red-500 text-sm">{formik.errors.displayName}</div>
+              <div className="text-red-500 text-sm">
+                {formik.errors.displayName}
+              </div>
             )}
           </div>
           <div className="grid w-full max-w-sm items-center gap-3">
@@ -139,17 +149,21 @@ function Register() {
               </>
             )}
             <Input
+              required
               onChange={handleImage}
               ref={imageRef}
               type="file"
               name="photoURL"
               placeholder="Your name"
             />
-            {imageError &&<div className="text-red-500 text-sm">{imageError}</div> }
+            {imageError && (
+              <div className="text-red-500 text-sm">{imageError}</div>
+            )}
           </div>
           <div className="grid w-full max-w-sm items-center gap-3">
             <Label>Email</Label>
             <Input
+              required
               value={formik.values.email}
               onChange={formik.handleChange}
               type="email"
@@ -157,13 +171,14 @@ function Register() {
               onBlur={formik.handleBlur}
               placeholder="your-mail@example.com"
             />
-             {formik.touched.email && formik.errors.email && (
+            {formik.touched.email && formik.errors.email && (
               <div className="text-red-500 text-sm">{formik.errors.email}</div>
             )}
           </div>
           <div className="grid w-full mt-4 max-w-sm items-center gap-3">
             <Label>Password</Label>
             <Input
+              required
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -171,23 +186,27 @@ function Register() {
               name="password"
               placeholder="Your password"
             />
-             {formik.touched.password && formik.errors.password && (
-              <div className="text-red-500 text-sm">{formik.errors.password}</div>
+            {formik.touched.password && formik.errors.password && (
+              <div className="text-red-500 text-sm">
+                {formik.errors.password}
+              </div>
             )}
           </div>
           <div className="grid w-full mt-4 max_w-sm items-center gap-3">
             <Button type="submit">Register</Button>
-            {firebaseError && <div className="text-red-500 text-sm">{firebaseError}</div>}
+            {firebaseError && (
+              <div className="text-red-500 text-sm">{firebaseError}</div>
+            )}
           </div>
         </form>
       </Card>
-      <div data-aos="slide-left">
+      <div data-aos="slide-left" className="w-full md:w-1/2">
         <Lottie
           lottieRef={lottieRef}
           animationData={lot}
           loop={true}
           speed={0.1}
-          style={{ width: 400, height: 400 }}
+          style={{ width: "100%", height: "auto" }}
         />
       </div>
     </section>

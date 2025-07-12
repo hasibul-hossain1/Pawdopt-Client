@@ -5,62 +5,127 @@ import Divider from "@/Shared/Divider";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import Lottie from "lottie-react";
-import lot from '../../assets/2.json'
-import {createUserWithGoogle} from '../../../firebase/firebasePanel'
+import lot from "../../assets/2.json";
+import {
+  createUserWithGoogle,
+  signInUser,
+} from "../../../firebase/firebasePanel";
 import { api } from "@/lib/api";
-
-
+import { useFormik } from "formik";
+import { useState } from "react";
 
 function LoginPage() {
+  const [firebaseError, setFirebaseError] = useState("");
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validate: (values) => {
+      const errors = {};
+      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email))
+        errors.email = "Invalid email";
+      if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}$/.test(values.password))
+        errors.password =
+          "Invalid password. must use one lowercase one uppercase and one number and at least 6 character";
+      return errors;
+    },
+    onSubmit: (values) => {
+      setFirebaseError("");
+      signInUser(values.email, values.password)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          setFirebaseError(err?.message || "Unexpected Error");
+        });
+    },
+  });
 
- const handleGoogleLogin = async() => {
+  const handleGoogleLogin = async () => {
     try {
-    const data=await createUserWithGoogle();
-    const user=data.user
-    const res=await api.post('/users',{name:user.displayName,email:user.email})
-    const result=await res.data
-    console.log(result);
+      const data = await createUserWithGoogle();
+      const user = data.user;
+      const res = await api.post("/users", {
+        name: user.displayName,
+        email: user.email,
+      });
+      const result = await res.data;
+      console.log(result);
     } catch (error) {
       console.log(error);
     }
   };
 
-
   return (
-    <section className="flex justify-center items-center h-screen">
-      <Card className="p-8 rounded-lg" data-aos="slide-right">
-        <form>
+    <section className="flex flex-col-reverse md:flex-row justify-center items-center h-screen">
+      <Card className="p-8 rounded-lg w-full max-w-md" data-aos="slide-right">
+        <form onSubmit={formik.handleSubmit}>
           <h4 className="mb-4">Login With</h4>
 
-          <div className="flex justify-around flex-col sm:flex-row">
-            <Button type="button" onClick={handleGoogleLogin} variant="ghost" className="border">
-                <FaGoogle/>
+          <div className="flex justify-around sm:flex-row">
+            <Button
+              type="button"
+              onClick={handleGoogleLogin}
+              variant="ghost"
+              className="border"
+            >
+              <FaGoogle />
               Google
             </Button>
             <Button variant="ghost" className="border">
-                <FaGithub/>
+              <FaGithub />
               Github
             </Button>
           </div>
           <Divider>OR</Divider>
           <div className="grid w-full max-w-sm items-center gap-3">
             <Label>Email</Label>
-            <Input type="email" placeholder="your-mail@example.com" />
+            <Input
+              required
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              name="email"
+              type="email"
+              placeholder="your-mail@example.com"
+            />
+            {formik.touched.email && formik.errors.email && (
+              <div className="text-red-500 text-sm">{formik.errors.email}</div>
+            )}
           </div>
           <div className="grid w-full mt-4 max-w-sm items-center gap-3">
             <Label>Password</Label>
-            <Input type="password" placeholder="Your password" />
+            <Input
+              required
+              onChange={formik.handleChange}
+              name="password"
+              onBlur={formik.handleBlur}
+              type="password"
+              placeholder="Your password"
+            />
+            {formik.touched.password && formik.errors.password && (
+              <div className="text-red-500 text-sm">
+                {formik.errors.password}
+              </div>
+            )}
           </div>
           <div className="grid w-full mt-4 max-w-sm items-center gap-3">
             <Button type="submit">Login</Button>
+            {firebaseError && (
+              <div className="text-red-500 text-sm">{firebaseError}</div>
+            )}
           </div>
         </form>
       </Card>
-      <div data-aos="slide-left"><Lottie animationData={lot} loop={true} style={{width: 400, height: 400}}/></div>
+      <div data-aos="slide-left" className="w-full md:w-1/2">
+        <Lottie
+          animationData={lot}
+          loop={true}
+          style={{ width: "100%", height: "auto" }}
+        />
+      </div>
     </section>
   );
 }
-
-
 
 export default LoginPage;
