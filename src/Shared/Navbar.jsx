@@ -42,13 +42,13 @@ function Navbar() {
 
   const navigators = (
     <>
-      <NavLink to='/' className="hover:text-primary transition-colors">
+      <NavLink to='/' className={({isActive})=>`${isActive?'text-primary':''} hover:text-primary transition-colors`}>
         Home
       </NavLink>
-      <NavLink to='/pet-list' className="hover:text-primary transition-colors">
+      <NavLink to='/pet-list' className={({isActive})=>`${isActive?'text-primary':''} hover:text-primary transition-colors`}>
         Pet Listing
       </NavLink>
-      <a href="/contact" className="hover:text-primary transition-colors">
+      <a href="/contact" className={({isActive})=>`${isActive?'text-primary':''} hover:text-primary transition-colors`}>
         Donation Campaigns
       </a>
     </>

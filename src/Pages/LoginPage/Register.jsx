@@ -12,6 +12,7 @@ import axios from "axios";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { api } from "@/lib/api";
+import { Upload } from "lucide-react";
 
 function Register() {
   const lottieRef = useRef();
@@ -134,12 +135,17 @@ function Register() {
           </div>
           <div className="grid w-full max-w-sm items-center gap-3">
             <Label>Photo</Label>
-            {imageURL && (
-              <Avatar className="size-12 rounded-lg">
-                <AvatarImage src={imageURL} />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            )}
+            <div className="w-32 h-32 border-2 border-dashed rounded-lg flex items-center justify-center">
+                {imageURL ? (
+                  <img
+                    src={imageURL}
+                    alt="Pet preview"
+                    className="h-full w-full object-cover rounded-lg"
+                  />
+                ) : (
+                  <Upload className="h-8 w-8 text-gray-400" />
+                )}
+              </div>
             {progress === 0 ? (
               ""
             ) : (

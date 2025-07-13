@@ -3,7 +3,7 @@ import { Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useTheme } from "@/hooks/Theme"
 
-export function ModeToggle() {
+export  function ModeToggle() {
   const { setTheme } = useTheme()
   const currentTheme=localStorage.getItem('vite-ui-theme')
   

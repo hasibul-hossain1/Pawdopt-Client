@@ -1,13 +1,13 @@
-
 import React, { useState } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
-import { Home, PawPrint, PlusCircle, List, Heart, Megaphone, HandCoins, Menu, X } from 'lucide-react';
+import { Link, NavLink, Outlet } from 'react-router';
+import { PlusCircle, List, Heart, Megaphone, HandCoins, Menu, X, PlusSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import Logo from '@/Shared/Logo';
-import MoodToggle from '@/Shared/MoodToggle';
+import {ModeToggle} from '@/Shared/MoodToggle';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { signOUtUser } from '../../firebase/firebasePanel';
+import { useAuth } from '@/hooks/Auth';
 
 const navLinks = [
   { to: '/dashboard/add-pet', icon: <PlusCircle className="h-5 w-5" />, text: 'Add a pet' },
@@ -18,16 +18,43 @@ const navLinks = [
   { to: '/dashboard/my-donations', icon: <HandCoins className="h-5 w-5" />, text: 'My Donations' },
 ];
 
+
 const DashboardLayout = () => {
+  const currentUser=useAuth()
+  console.log(currentUser);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const status = currentUser.data ? (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <Avatar className="size-12">
+          <AvatarImage src={currentUser?.data?.photoURL||"https://github.com/shadcn.png"} />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem><Link to='/'>Home</Link></DropdownMenuItem>
+        <DropdownMenuItem onClick={()=>signOUtUser()}>Logout</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ) : (
+    <>
+      <Link to="/login">
+        <Button>Login</Button>
+      </Link>
+      <Link to="/register">
+        <Button variant="outline">Register</Button>
+      </Link>
+    </>
+  );
+
   return (
-    <div className="min-h-screen w-full bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <div className="flex min-h-screen w-full bg-gray-100 dark:bg-gray-900">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-accent shadow-lg transform ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-0`}
+        } transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}
       >
         <div className="p-4 flex items-center justify-between">
           <Logo />
@@ -53,39 +80,15 @@ const DashboardLayout = () => {
         </nav>
       </aside>
 
-      <div className="flex flex-col md:ml-64">
+      <div className="flex flex-col flex-1">
         {/* Top Navbar */}
-        <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-4 border-b bg-white dark:bg-gray-800 px-6">
+        <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-4 border-b bg-accent px-6">
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsSidebarOpen(true)}>
             <Menu className="h-6 w-6" />
           </Button>
           <div className="flex items-center gap-4 ml-auto">
-            <MoodToggle />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">shadcn</p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      m@example.com
-                    </p>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Log out</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {status}
+            <ModeToggle />
           </div>
         </header>
 
