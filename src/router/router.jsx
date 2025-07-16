@@ -11,7 +11,11 @@ import AdoptionRequest from "@/Pages/Dashboard/AdoptionRequest";
 import CreateDonationCampaign from "@/Pages/Dashboard/CreateDonationCampaign";
 import MyDonationCampaigns from "@/Pages/Dashboard/MyDonationCampaigns";
 import MyDonations from "@/Pages/Dashboard/MyDonations";
+import UpdatePet from "@/Pages/AddPet/UpdatePet";
+import EditCampaign from "@/Pages/Dashboard/EditCampaign";
+import ViewDonors from "@/Pages/Dashboard/ViewDonors";
 import PetDetails from "@/Pages/PetDetails/PetDetails";
+import DonationCampaign from "@/Pages/DonationCampaign/DonationCampaign";
 
 export const router=createBrowserRouter([
     {
@@ -37,6 +41,10 @@ export const router=createBrowserRouter([
             {
                 path:'/pets/:id',
                 Component:PetDetails
+            },
+            {
+                path:'/donation-campaign',
+                Component:DonationCampaign
             }
         ]
     },
@@ -67,6 +75,18 @@ export const router=createBrowserRouter([
             {
                 path:'my-donations',
                 Component:MyDonations
+            },
+            {
+                path:'update-pet/:id',
+                Component:UpdatePet
+            },
+            {
+                path:'edit-campaign/:id',
+                Component:EditCampaign
+            },
+            {
+                path:'view-donors/:id',
+                Component:ViewDonors
             }
         ]
     }

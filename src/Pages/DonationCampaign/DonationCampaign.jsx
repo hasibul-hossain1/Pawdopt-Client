@@ -1,25 +1,24 @@
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import PetCard from "./PetCard";
+import DonationCard from "./DonationCard";
 import { api } from "@/lib/api";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { useDebounce } from "use-debounce";
-import { LoaderOne } from "@/components/ui/loader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const LIMIT = 10;
 
 const fetchPets = async ({ pageParam = 1, queryKey }) => {
   const [, search] = queryKey;
-  const res = await api.get(`/pets?search=${search}&page=${pageParam}&limit=${LIMIT}`);
+  const res = await api.get(`/all-donation-campaigns?search=${search}&page=${pageParam}&limit=${LIMIT}`);
   return {
     pets: res.data.data,
     nextPage: res.data.nextPage,
   };
 };
 
-const PetList = () => {
+const DonationCampaign = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch] = useDebounce(searchTerm, 500);
 
@@ -51,10 +50,13 @@ const PetList = () => {
 
   const pets = data?.pages.flatMap((page) => page.pets) || [];
   
+  useEffect(()=>{
+    console.log(data)
+  },[data])
   return (
     <section className="mt-4">
-      <h2>Available Pets</h2>
-     <p className="-mt-2">Find your perfect furry (or feathery) companion</p>
+      <h2>Support a Life, Make a Difference</h2>
+     <p className="-mt-2">Your donation helps give pets a second chance at life, love, and a forever home.</p>
       <Separator className="mb-4" />
 
       {/* Search Input */}
@@ -82,10 +84,11 @@ const PetList = () => {
         }`}
       >
         {pets.map((pet) => (
-          <PetCard
+          <DonationCard
             key={pet._id}
             _id={pet._id}
-            age={pet.petAge}
+            donationRaised={pet.donationRaised}
+            maxDonationAmount={pet.maxDonationAmount}
             location={pet.petLocation}
             name={pet.petName}
             image={pet.petImage}
@@ -112,4 +115,4 @@ const PetList = () => {
   );
 };
 
-export default PetList;
+export default DonationCampaign;

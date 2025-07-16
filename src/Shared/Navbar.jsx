@@ -48,9 +48,9 @@ function Navbar() {
       <NavLink to='/pet-list' className={({isActive})=>`${isActive?'text-primary':''} hover:text-primary transition-colors`}>
         Pet Listing
       </NavLink>
-      <a href="/contact" className={({isActive})=>`${isActive?'text-primary':''} hover:text-primary transition-colors`}>
+      <NavLink to='/donation-campaign' className={({isActive})=>`${isActive?'text-primary':''} hover:text-primary transition-colors`}>
         Donation Campaigns
-      </a>
+      </NavLink>
     </>
   );
   return (

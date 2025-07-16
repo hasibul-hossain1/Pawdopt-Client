@@ -82,7 +82,6 @@ const AddPet = () => {
         petImage: imagePreview,
         addedBy:currentUser.data.email
       };
-console.log(petData);
       try {
         const res=await api.post('/pets',petData)
         console.log(res.data.message);
@@ -96,9 +95,12 @@ console.log(petData);
   });
 
   const handleImageChange = async (event) => {
-    setProgress(33);
     const file = event.currentTarget.files[0];
     if (file) {
+      if (!file.type.startsWith("image/")) {
+        return console.log('file type not matched');
+      }
+      setProgress(33);
       setImageFile(file);
       const formData = new FormData();
       formData.append("file", file);
@@ -115,7 +117,7 @@ console.log(petData);
         setImagePreview(result);
         setProgress(100);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
       setProgress(0);
     }
@@ -160,6 +162,7 @@ console.log(petData);
                 id="petImage"
                 name="petImage"
                 type="file"
+                accept='image/*'
                 onChange={handleImageChange}
                 className="hidden"
               />
