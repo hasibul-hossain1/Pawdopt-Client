@@ -16,6 +16,7 @@ import EditCampaign from "@/Pages/Dashboard/EditCampaign";
 import ViewDonors from "@/Pages/Dashboard/ViewDonors";
 import PetDetails from "@/Pages/PetDetails/PetDetails";
 import DonationCampaign from "@/Pages/DonationCampaign/DonationCampaign";
+import DonationDetails from "@/Pages/DonationCampaign/DonationDetails";
 
 export const router=createBrowserRouter([
     {
@@ -45,6 +46,10 @@ export const router=createBrowserRouter([
             {
                 path:'/donation-campaign',
                 Component:DonationCampaign
+            },
+            {
+                path:'/donation-details/:id',
+                Component:DonationDetails
             }
         ]
     },

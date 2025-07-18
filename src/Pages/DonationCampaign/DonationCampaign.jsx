@@ -33,7 +33,7 @@ const DonationCampaign = () => {
     status,
     error,
   } = useInfiniteQuery({
-    queryKey: ["pets", debouncedSearch],
+    queryKey: ["donations", debouncedSearch],
     queryFn: fetchPets,
     getNextPageParam: (lastPage) => lastPage.nextPage,
     keepPreviousData: true,
@@ -87,6 +87,7 @@ const DonationCampaign = () => {
           <DonationCard
             key={pet._id}
             _id={pet._id}
+            lastDate={pet.lastDate}
             donationRaised={pet.donationRaised}
             maxDonationAmount={pet.maxDonationAmount}
             location={pet.petLocation}

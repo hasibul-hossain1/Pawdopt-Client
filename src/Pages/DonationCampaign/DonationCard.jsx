@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
+import { MdDeviceUnknown } from "react-icons/md";
 import {
   Card,
   CardAction,
@@ -12,7 +13,7 @@ import { Separator } from "@radix-ui/react-dropdown-menu";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaRegCalendarAlt } from "react-icons/fa";
 
-function DonationCard({ _id, name, maxDonationAmount, image, donationRaised }) {
+function DonationCard({ _id, lastDate, name, maxDonationAmount, image, donationRaised }) {
   return (
     <Card className="w-full bg-secondary hover:scale-105 duration-400 xs:w-xs">
       <div className="px-6">
@@ -37,9 +38,16 @@ function DonationCard({ _id, name, maxDonationAmount, image, donationRaised }) {
           <FaLocationDot /> <span className="font-bold">Donation Raised:</span>{" "}
           {donationRaised}$
         </p>
+        <p className="flex justify-start gap-2 items-center">
+          <MdDeviceUnknown /> <span className="font-bold">Status:</span>{" "}
+          {new Date(lastDate) < new Date() ||
+                  donationRaised >= maxDonationAmount
+                    ? "Closed"
+                    : "Running"}
+        </p>
       </CardDescription>
       <CardAction className="px-6 flex justify-end w-full">
-        <Link to={`/pets/${_id}`}>
+        <Link to={`/donation-details/${_id}`}>
           <Button className="">View Details</Button>
         </Link>
       </CardAction>
