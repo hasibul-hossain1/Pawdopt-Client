@@ -200,7 +200,7 @@ const AddPet = () => {
               )}
             </div>
             <div>
-              <Label htmlFor="petAge">Pet Age</Label>
+              <Label htmlFor="petAge">Pet Age (month)</Label>
               <Input
                 id="petAge"
                 name="petAge"

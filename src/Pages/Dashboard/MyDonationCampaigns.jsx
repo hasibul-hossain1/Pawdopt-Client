@@ -30,6 +30,7 @@ import {
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { FaEdit, FaTrash, FaUsers } from 'react-icons/fa';
+import ViewDonorsModal from './ViewDonorsModal';
 
 const MyDonationCampaigns = () => {
   const currentUser = useAuth();
@@ -95,7 +96,7 @@ const MyDonationCampaigns = () => {
     {
       accessorKey: 'status',
       header: 'Status',
-      cell: ({ row }) => (row.original.donatedAmount >= row.original.maxDonationAmount ? 'Completed' : 'Ongoing'),
+      cell: ({ row }) => (row.original.donatedAmount >= row.original.maxDonationAmount || new Date(row.original.lastDate) < new Date()  ? 'Closed' : 'Running'),
     },
     {
       id: 'actions',
@@ -128,11 +129,7 @@ const MyDonationCampaigns = () => {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          <Link to={`/dashboard/view-donors/${row.original._id}`}>
-            <Button variant="outline" size="sm">
-              <FaUsers />
-            </Button>
-          </Link>
+          <ViewDonorsModal campaignId={row.original._id} />
         </div>
       ),
       enableSorting: false,

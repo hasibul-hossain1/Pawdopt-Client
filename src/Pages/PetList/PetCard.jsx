@@ -31,7 +31,7 @@ function PetCard({ _id, name, age, location, image }) {
       <CardDescription className="px-6">
         <p className="flex justify-start gap-2 items-center">
           <FaRegCalendarAlt />
-          <span className="font-bold">Age:</span> {age} year
+          <span className="font-bold">Age:</span> {age} Month
         </p>
         <p className="flex justify-start gap-2 items-center">
           <FaLocationDot /> <span className="font-bold">Location:</span>{" "}

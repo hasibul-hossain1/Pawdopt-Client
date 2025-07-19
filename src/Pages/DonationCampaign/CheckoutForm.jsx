@@ -34,7 +34,7 @@ export default function CheckoutForm({amount,setIsDialogOpen,userData,campaignId
       alert(result.error.message);
     } else {
       if (result.paymentIntent.status === "succeeded") {
-        const saveData=await api.post('/donate',{campaignId,donatedBy:userData.email,amount})
+        const saveData=await api.post('/donate',{campaignId,donatedBy:userData.email,amount,paymentIntentId:result.paymentIntent.id})
         if (saveData.data) {
           refetch()
           alert("✅ Payment successful!");

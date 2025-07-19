@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import CheckoutForm from "./CheckoutForm";
+import DonationCard from "./DonationCard";
 
 const stripePromise = loadStripe(
   "pk_test_51Rh11RRogI4oERhxVE2KcnH8WvnRv19TMWufnEKaNMT4TFwxtU7fktxgItxkef1JYedGqsI6lowWMJObH83O2SPa00vHxDAjMJ"
@@ -29,6 +30,11 @@ const stripePromise = loadStripe(
 
 const fetchPetById = async (id) => {
   const res = await api.get(`/donation-details/${id}`);
+  return res.data;
+};
+const fetchDonations = async (id) => {
+  console.log(id);
+  const res = await api.get(`/recommended-donations/${id}`);
   return res.data;
 };
 
@@ -48,7 +54,15 @@ function DonationDetails() {
     queryKey: ["pet", id],
     queryFn: () => fetchPetById(id),
   });
-  console.log(pet);
+  const {
+    data: campaigns,
+    isLoading: campaignsLoading,
+    isError: campaignsError,
+  } = useQuery({
+    queryKey: ["recommended-donations",id],
+    queryFn:()=> fetchDonations(id),
+  });
+ 
 
 
   if (isLoading) {
@@ -61,6 +75,7 @@ function DonationDetails() {
 if (user.loading) {
   return 'loading'
 }
+console.log(campaigns)
   return (
     <section className="mt-4">
       <Card className="w-full">
@@ -214,6 +229,19 @@ if (user.loading) {
           </div>
         </div>
       </Card>
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Recommended Donations</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {campaigns &&
+            campaigns
+              .filter((campaign) => campaign._id !== id)
+              .slice(0, 3)
+              .map((campaign) => (
+                <DonationCard key={campaign._id} campaign={campaign} />
+              ))}
+              {console.log(campaigns)}
+        </div>
+      </div>
     </section>
   );
 }

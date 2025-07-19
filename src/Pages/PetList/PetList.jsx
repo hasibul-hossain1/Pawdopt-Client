@@ -5,22 +5,33 @@ import { api } from "@/lib/api";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { useDebounce } from "use-debounce";
-import { LoaderOne } from "@/components/ui/loader";
 import { useState } from "react";
+import Select from "react-select";
 
 const LIMIT = 10;
 
 const fetchPets = async ({ pageParam = 1, queryKey }) => {
-  const [, search] = queryKey;
-  const res = await api.get(`/pets?search=${search}&page=${pageParam}&limit=${LIMIT}`);
+  const [, search, category] = queryKey;
+  const res = await api.get(
+    `/pets?search=${search}&category=${category}&page=${pageParam}&limit=${LIMIT}`
+  );
   return {
     pets: res.data.data,
     nextPage: res.data.nextPage,
   };
 };
 
+const options = [
+  { value: "", label: "All" },
+  { value: "dog", label: "Dog" },
+  { value: "cat", label: "Cat" },
+  { value: "bird", label: "Bird" },
+  { value: "rabbit", label: "Rabbit" },
+];
+
 const PetList = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [category, setCategory] = useState({ value: "", label: "All" });
   const [debouncedSearch] = useDebounce(searchTerm, 500);
 
   const {
@@ -34,12 +45,11 @@ const PetList = () => {
     status,
     error,
   } = useInfiniteQuery({
-    queryKey: ["pets", debouncedSearch],
+    queryKey: ["pets", debouncedSearch, category.value],
     queryFn: fetchPets,
     getNextPageParam: (lastPage) => lastPage.nextPage,
     keepPreviousData: true,
   });
-
 
   const { ref: sentinelRef } = useInView({
     onChange: (inView) => {
@@ -50,11 +60,11 @@ const PetList = () => {
   });
 
   const pets = data?.pages.flatMap((page) => page.pets) || [];
-  
+
   return (
     <section className="mt-4">
       <h2>Available Pets</h2>
-     <p className="-mt-2">Find your perfect furry (or feathery) companion</p>
+      <p className="-mt-2">Find your perfect furry (or feathery) companion</p>
       <Separator className="mb-4" />
 
       {/* Search Input */}
@@ -65,6 +75,12 @@ const PetList = () => {
           className="max-w-sm"
           type="text"
           placeholder="🔍 Search pets"
+        />
+        <Select
+          className="w-[180px]"
+          options={options}
+          value={category}
+          onChange={setCategory}
         />
       </div>
 
@@ -82,7 +98,7 @@ const PetList = () => {
         }`}
       >
         {pets.map((pet) => (
-          <PetCard
+          pet.adopted?"":<PetCard
             key={pet._id}
             _id={pet._id}
             age={pet.petAge}

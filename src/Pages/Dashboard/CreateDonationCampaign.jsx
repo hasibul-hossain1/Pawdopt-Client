@@ -260,7 +260,7 @@ const CreateDonationCampaign = () => {
           )}
 
           <Button type="submit" className="w-full">
-            Add Pet
+            Create Campaign
           </Button>
         </form>
       </CardContent>

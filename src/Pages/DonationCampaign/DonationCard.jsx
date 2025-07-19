@@ -13,20 +13,22 @@ import { Separator } from "@radix-ui/react-dropdown-menu";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaRegCalendarAlt } from "react-icons/fa";
 
-function DonationCard({ _id, lastDate, name, maxDonationAmount, image, donationRaised }) {
+function DonationCard({ campaign }) {
+  const { _id, lastDate, petName, maxDonationAmount, petImage, donationRaised } = campaign;
+  console.log(campaign);
   return (
     <Card className="w-full bg-secondary hover:scale-105 duration-400 xs:w-xs">
       <div className="px-6">
         <img
           className="w-full rounded-xl object-cover object-center h-48"
-          src={image}
+          src={petImage}
           alt=""
         />
       </div>
       <Separator />
       <CardHeader>
         <CardTitle>
-          <h5 className="text-3xl">{name}</h5>
+          <h5 className="text-3xl">{petName}</h5>
         </CardTitle>
       </CardHeader>
       <CardDescription className="px-6">

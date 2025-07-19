@@ -100,7 +100,7 @@ function PetDetails() {
             <CardContent>
               <p className="flex justify-start gap-2 items-center">
                 <FaRegCalendarAlt />
-                <span className="font-bold">Age:</span> {pet.petAge} year
+                <span className="font-bold">Age:</span> {pet.petAge} Month
               </p>
               <p className="flex justify-start gap-2 items-center">
                 <FaLocationDot /> <span className="font-bold">Location:</span>{" "}

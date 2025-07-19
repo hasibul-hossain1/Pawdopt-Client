@@ -85,14 +85,7 @@ const DonationCampaign = () => {
       >
         {pets.map((pet) => (
           <DonationCard
-            key={pet._id}
-            _id={pet._id}
-            lastDate={pet.lastDate}
-            donationRaised={pet.donationRaised}
-            maxDonationAmount={pet.maxDonationAmount}
-            location={pet.petLocation}
-            name={pet.petName}
-            image={pet.petImage}
+           campaign={pet}
           />
         ))}
       </div>

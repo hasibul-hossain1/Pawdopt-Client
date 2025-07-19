@@ -18,6 +18,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const MyDonations = () => {
   const currentUser = useAuth();
@@ -29,15 +30,27 @@ const MyDonations = () => {
     pageSize: 10,
   });
 
-  const { data: donations, isLoading, isError } = useQuery({
+  const { data: donations, isLoading, isError,refetch } = useQuery({
     queryKey: ['my-donations', email],
     queryFn: async () => {
       if (!email) return [];
-      const res = await api.get(`/my-donations?email=${email}`);
+      const res = await api.get(`/donate?email=${email}`);
       return res.data;
     },
     enabled: !!email,
   });
+
+const handleRefund=async(paymentIntentId,id)=>{
+  console.log(paymentIntentId);
+  const res=await api.post('refund',{paymentIntentId})
+  if (res.data.success) {
+    api.patch(`/updateRefund/${id}`,{refund:true})
+    alert("refund successful")
+    refetch()
+  }else{
+    alert('refund failed')
+  }
+}
 
   const columns = [
     {
@@ -47,16 +60,27 @@ const MyDonations = () => {
       enableSorting: false,
     },
     {
-      accessorKey: 'campaignName',
-      header: 'Campaign Name',
+      accessorKey: 'petImage',
+      header: 'Pet image',
+      cell:({row})=>(<Avatar className='rounded-full'>
+          <AvatarImage src={row.original.petImage} alt={row.original.petName} />
+          <AvatarFallback>{row.original.campaignName.charAt(0)}</AvatarFallback>
+        </Avatar>)
+    },
+    {
+      accessorKey: 'petName',
+      header: 'Pet name',
+      cell:({row})=>row.original.campaignName
     },
     {
       accessorKey: 'donatedAmount',
       header: 'Donated Amount',
+      cell:({row})=>row.original.amount
     },
     {
-      accessorKey: 'transactionId',
-      header: 'Transaction ID',
+      accessorKey: 'actions',
+      header: 'Actions',
+      cell:({row})=><Button disabled={row.original.refund} onClick={()=>handleRefund(row.original.paymentIntentId,row.original._id)} variant="outline">{row.original.refund?"refunded":"refund"}</Button>
     },
   ];
 
