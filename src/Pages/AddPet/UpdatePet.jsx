@@ -14,6 +14,7 @@ import axios from "axios";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/hooks/Auth";
 import { useLocation } from "react-router";
+import { toast } from "sonner";
 
 const petCategories = [
   { value: "dog", label: "Dog" },
@@ -83,12 +84,12 @@ const UpdatePet = () => {
         addedBy:currentUser.data.email,
       };
       try {
-        const res=await api.put(`/update-pet/${pet._id}`,petData)
-       if (res.data) {
-         alert('update successfully')
-       }
+        const res = await api.put(`/update-pet/${pet._id}`, petData);
+        if (res.data) {
+          toast.success('Pet updated successfully');
+        }
       } catch (error) {
-        console.error("Error updating pet:", error);
+        toast.error("Error updating pet:", error.message);
         setFieldError("general", "An error occurred while updating the pet.");
       } finally {
         setSubmitting(false);
@@ -126,7 +127,7 @@ const UpdatePet = () => {
   };
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="max-w-2xl mx-auto" data-aos="fade-up">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <PawPrint className="h-6 w-6" />

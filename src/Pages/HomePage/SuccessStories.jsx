@@ -32,7 +32,7 @@ function SuccessStories() {
       <Divider />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {stories.map((story, index) => (
-          <div key={index} className="flex flex-col rounded-md shadow-sm p-4 border space-y-2 mt-10">
+          <div key={index} className="flex flex-col rounded-md shadow-sm p-4 border space-y-2 mt-10" data-aos="fade-up">
             <h3>
               <img
                 src={story.image}

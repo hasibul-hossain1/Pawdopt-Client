@@ -14,6 +14,7 @@ import { useAuth } from "@/hooks/Auth";
 import { Calendar } from "@/components/ui/calendar";
 import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const fetchCampaign=async(id)=>{
 const res=await api.get(`/single-donation-request/${id}`)
@@ -74,13 +75,14 @@ const EditCampaign = () => {
           maxDonationAmount: parseInt(values.maxDonationAmount),
         };
         console.log(payload);
-        const res = await api.post("/create-donation", payload);
+        const res = await api.put(`/single-donation-update/${id}`, payload);
         if (res.data.success) {
-          // show success message/toast
+          toast.success('Donation campaign updated successfully!');
           resetForm();
           setImagePreview("");
         }
       } catch (error) {
+        toast.error(error.message || "An error occurred");
         setFieldError("general", error.message || "An error occurred");
       } finally {
         setSubmitting(false);
@@ -117,7 +119,7 @@ const EditCampaign = () => {
   };
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="max-w-2xl mx-auto" data-aos="fade-up">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <PawPrint className="h-6 w-6" />

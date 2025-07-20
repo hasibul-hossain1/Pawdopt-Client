@@ -13,6 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { api } from "@/lib/api";
 import { Upload } from "lucide-react";
+import { toast } from "sonner";
 
 function Register() {
   const lottieRef = useRef();
@@ -56,6 +57,7 @@ function Register() {
               displayName: values.displayName,
               photoURL: imageURL || "",
             });
+            toast.success("Registration successful!");
           }
         })
         .then(() => {
@@ -64,10 +66,13 @@ function Register() {
               name: values.displayName,
               email: values.email,
             })
-            .then((res) => console.log(res.data))
-            .catch((err) => console.log(err));
+            .then((res) => toast.success("User data saved!"))
+            .catch((err) => toast.error("Failed to save user data: " + err.message));
         })
-        .catch((err) => setFirebaseError(err?.message || "Invalid auth Error"));
+        .catch((err) => {
+          setFirebaseError(err?.message || "Invalid auth Error");
+          toast.error(err?.message || "Registration failed!");
+        });
       resetForm();
       if (imageRef.current.value || imageURL) {
         imageRef.current.value = "";
@@ -82,7 +87,8 @@ function Register() {
     setImageURL("");
     const file = e.target.files[0];
     if (!file) {
-      alert("No file detected");
+      toast.error("No file detected");
+      return;
     }
     const formData = new FormData();
     formData.append("file", file);
@@ -97,8 +103,9 @@ function Register() {
       const result = res.data.url;
       setImageURL(result);
       setProgress(100);
+      toast.success("Image uploaded successfully!");
     } catch (error) {
-      console.error(error);
+      toast.error("Image upload failed: " + error.message);
     }
     setProgress(0);
   };

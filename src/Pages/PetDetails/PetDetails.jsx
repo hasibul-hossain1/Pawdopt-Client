@@ -84,14 +84,14 @@ function PetDetails() {
     <section className="mt-4">
       <Card className="w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
+          <div data-aos="fade-right">
             <img
               className="w-full h-full object-cover rounded-t-xl md:rounded-l-xl md:rounded-t-none"
               src={pet.petImage}
               alt={pet.petName}
             />
           </div>
-          <div className="p-6">
+          <div className="p-6" data-aos="fade-left">
             <CardHeader>
               <CardTitle>
                 <h5 className="text-3xl">{pet.petName}</h5>

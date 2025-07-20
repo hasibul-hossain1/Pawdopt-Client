@@ -32,6 +32,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { toast } from 'sonner';
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import { MdOutlinePets } from 'react-icons/md';
+import TableSkeleton from './TableSkeleton';
 
 const MyAddedPets = () => {
   const currentUser = useAuth();
@@ -69,13 +70,14 @@ const MyAddedPets = () => {
 
   const adoptPetMutation = useMutation({
     mutationFn: async (id) => {
-      await api.patch(`/pets/adopt/${id}`, { adopted: true });
+      await api.patch(`/update-adoption/${id}`, { adopted: true });
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['my-added-pets']);
       toast.success('Pet marked as adopted!');
     },
     onError: (error) => {
+      console.log(error);
       toast.error('Failed to mark as adopted.', error.message);
     },
   });
@@ -178,11 +180,11 @@ const MyAddedPets = () => {
     },
   });
 
-  if (isLoading) return <div>Loading pets...</div>;
+  if (isLoading) return <TableSkeleton columns={columns} />;
   if (isError) return <div>Error loading pets: {error.message}</div>;
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10" data-aos="fade-up">
       <h2 className="text-2xl font-bold mb-4">My Added Pets</h2>
       <div className="rounded-md border overflow-x-auto">
         <Table>

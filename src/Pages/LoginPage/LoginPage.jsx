@@ -13,6 +13,7 @@ import {
 import { api } from "@/lib/api";
 import { useFormik } from "formik";
 import { useState } from "react";
+import { toast } from "sonner";
 
 function LoginPage() {
   const [firebaseError, setFirebaseError] = useState("");
@@ -34,9 +35,10 @@ function LoginPage() {
       setFirebaseError("");
       signInUser(values.email, values.password)
         .then((res) => {
-          console.log(res);
+          toast.success("Logged in successfully!");
         })
         .catch((err) => {
+          toast.error(err?.message || "Unexpected Error");
           setFirebaseError(err?.message || "Unexpected Error");
         });
     },
@@ -51,9 +53,9 @@ function LoginPage() {
         email: user.email,
       });
       const result = await res.data;
-      console.log(result);
+      toast.success("Google login successful!");
     } catch (error) {
-      console.log(error);
+      toast.error(error.message || "Google login failed!");
     }
   };
 

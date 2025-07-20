@@ -14,7 +14,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 
 function PetCard({ _id, name, age, location, image }) {
   return (
-    <Card className="w-full bg-secondary hover:scale-105 duration-400 xs:w-xs">
+    <Card className="w-full bg-secondary hover:scale-105 duration-400 xs:w-xs" data-aos="zoom-in">
       <div className="px-6">
         <img
           className="w-full rounded-xl object-cover object-center h-48"

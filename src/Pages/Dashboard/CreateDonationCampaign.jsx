@@ -12,6 +12,7 @@ import axios from "axios";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/hooks/Auth";
 import { Calendar } from "@/components/ui/calendar";
+import { toast } from "sonner";
 
 const CreateDonationCampaign = () => {
   const [imagePreview, setImagePreview] = useState("");
@@ -58,11 +59,12 @@ const CreateDonationCampaign = () => {
         console.log(payload);
         const res = await api.post("/create-donation", payload);
         if (res.data.success) {
-          // show success message/toast
+          toast.success('Donation campaign created successfully!');
           resetForm();
           setImagePreview("");
         }
       } catch (error) {
+        toast.error(error.message || "An error occurred");
         setFieldError("general", error.message || "An error occurred");
       } finally {
         setSubmitting(false);
@@ -99,7 +101,7 @@ const CreateDonationCampaign = () => {
   };
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="max-w-2xl mx-auto" data-aos="fade-up">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <PawPrint className="h-6 w-6" />

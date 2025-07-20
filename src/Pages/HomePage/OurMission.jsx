@@ -33,8 +33,9 @@ function OurMission() {
             hoverScale={0.95}
             blurToFocus={true}
             colorShiftOnHover={false}
+            data-aos="fade-up"
           />
-        <div>
+        <div data-aos="fade-up">
           <p className="text-lg md:text-xl leading-relaxed">
             At{" "}
             <span className="text-primary text-2xl md:text-3xl">Pawdopt</span>,

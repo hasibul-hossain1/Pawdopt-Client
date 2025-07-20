@@ -62,13 +62,17 @@ const DashboardLayout = () => {
   const currentUser = useAuth();
   console.log(currentUser);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  // if (currentUser.loading) {
+  //  return "loading" 
+  // }
 
   const status = currentUser.data ? (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar className="size-12">
+          {console.log(currentUser.data?.photoURL)}
           <AvatarImage
-            src={currentUser?.data?.photoURL || "https://github.com/shadcn.png"}
+            src={currentUser?.data?.photoURL}
           />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>

@@ -13,6 +13,7 @@ import { api } from "@/lib/api";
 import axios from "axios";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/hooks/Auth";
+import { toast } from "sonner";
 
 const petCategories = [
   { value: "dog", label: "Dog" },
@@ -83,10 +84,10 @@ const AddPet = () => {
         addedBy:currentUser.data.email
       };
       try {
-        const res=await api.post('/pets',petData)
-        console.log(res.data.message);
+        const res = await api.post('/pets', petData);
+        toast.success(res.data.message);
       } catch (error) {
-        console.error("Error adding pet:", error);
+        toast.error("Error adding pet:", error.message);
         setFieldError("general", "An error occurred while adding the pet.");
       } finally {
         setSubmitting(false);
@@ -124,7 +125,7 @@ const AddPet = () => {
   };
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="max-w-2xl mx-auto" data-aos="fade-up">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <PawPrint className="h-6 w-6" />

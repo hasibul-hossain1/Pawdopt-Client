@@ -20,6 +20,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import TableSkeleton from './TableSkeleton';
 
 const AdoptionRequest = () => {
   const currentUser = useAuth();
@@ -141,11 +142,11 @@ const AdoptionRequest = () => {
     },
   });
 
-  if (isLoading) return <div>Loading adoption requests...</div>;
+  if (isLoading) return <TableSkeleton columns={columns} />;
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4" data-aos="fade-up">
       <h2 className="text-2xl font-bold mb-4">Adoption Requests</h2>
       {requests && requests.length > 0 ? (
         <div className="rounded-md border">

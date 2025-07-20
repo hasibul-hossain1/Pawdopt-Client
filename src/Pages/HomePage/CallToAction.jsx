@@ -17,7 +17,8 @@ function CallToAction() {
           title="Adoption Begins with Compassion"
           description="A simple moment — a glance between two people and a dog — can be the beginning of something life-changing. That gentle nudge of a nose, that hopeful look from behind the fence, speaks of days spent waiting for someone to care. Compassion is what turns that moment into a new beginning.
 When you choose to adopt, you're giving more than shelter. You're giving warmth, attention, laughter, late-night walks, and quiet cuddles. You're saying, “You matter.”
-And in return, you receive a kind of loyalty and love that’s pure, uncomplicated, and endlessly thankful. Compassion doesn't end at the shelter door — it comes home with you, wagging its tail and forever grateful."
+And in return, you receive a kind of loyalty and love that’s pure, uncomplicated, and endlessly thankful. Compassion doesn’t end at the shelter door — it comes home with you, wagging its tail and forever grateful."
+          data-aos="fade-right"
         />
         <CtaCard
           image={ctaImg2}
@@ -28,6 +29,7 @@ That rescued cat you hold in your arms may have come from uncertainty, but in yo
 This is more than ownership. It’s partnership.
 It’s the promise that no matter what life brings, you won’t have to face it alone — because now you have each other."
           className="md:justify-end justify-start md:flex-row-reverse"
+          data-aos="fade-left"
         />
         <CtaCard
           image={ctaImg3}
@@ -39,6 +41,7 @@ Adoption is not just the kinder choice — it’s the wiser one. It teaches comp
 And every animal adopted creates space for another to be rescued. So don’t buy love when it’s already waiting behind the shelter doors. Adopt, and become someone’s forever hero.
 
 "
+          data-aos="fade-right"
         />
       </div>
     </Section>

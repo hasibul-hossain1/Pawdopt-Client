@@ -80,14 +80,14 @@ console.log(campaigns)
     <section className="mt-4">
       <Card className="w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
+          <div data-aos="fade-right">
             <img
               className="w-full h-full object-cover rounded-t-xl md:rounded-l-xl md:rounded-t-none"
               src={pet.petImage}
               alt={pet.petName}
             />
           </div>
-          <div className="p-6">
+          <div className="p-6" data-aos="fade-left">
             <CardHeader>
               <CardTitle>
                 <h5 className="text-3xl">{pet.petName}</h5>
@@ -114,7 +114,7 @@ console.log(campaigns)
               <div>
                 <p>
                   <span className="font-bold">Donation Status:</span>{" "}
-                  {new Date(pet.lastDate) < new Date() ||
+                  {pet?.paused?"paused":new Date(pet.lastDate) < new Date() ||
                   pet.donationRaised >= pet.maxDonationAmount
                     ? "Closed"
                     : "Running"}
@@ -136,11 +136,11 @@ console.log(campaigns)
                       disabled={
                         new Date(pet.lastDate) < new Date() ||
                         pet.donationRaised >= pet.maxDonationAmount
-                          ? true
+                          || pet.paused ? true
                           : false
                       }
                     >
-                      Donate
+                      {pet?.paused?"Donation paused by user":"Donate"}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px]">

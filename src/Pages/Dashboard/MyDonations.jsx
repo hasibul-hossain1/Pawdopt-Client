@@ -19,6 +19,16 @@ import {
 } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { toast } from 'sonner';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 const MyDonations = () => {
   const currentUser = useAuth();
@@ -45,10 +55,10 @@ const handleRefund=async(paymentIntentId,id)=>{
   const res=await api.post('refund',{paymentIntentId})
   if (res.data.success) {
     api.patch(`/updateRefund/${id}`,{refund:true})
-    alert("refund successful")
+    toast.success("Refund successful");
     refetch()
   }else{
-    alert('refund failed')
+    toast.error('Refund failed');
   }
 }
 
@@ -80,7 +90,29 @@ const handleRefund=async(paymentIntentId,id)=>{
     {
       accessorKey: 'actions',
       header: 'Actions',
-      cell:({row})=><Button disabled={row.original.refund} onClick={()=>handleRefund(row.original.paymentIntentId,row.original._id)} variant="outline">{row.original.refund?"refunded":"refund"}</Button>
+      cell:({row})=>(<Dialog>
+          <DialogTrigger asChild>
+            <Button disabled={row.original.refund} variant="outline">
+              {row.original.refund ? "refunded" : "refund"}
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Confirm Refund</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to refund this donation? This action cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant="destructive"
+                onClick={() => handleRefund(row.original.paymentIntentId, row.original._id)}
+              >
+                Confirm Refund
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>)
     },
   ];
 
@@ -102,7 +134,7 @@ const handleRefund=async(paymentIntentId,id)=>{
   if (isError) return <div>Error loading donations.</div>;
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10" data-aos="fade-up">
       <h2 className="text-2xl font-bold mb-4">My Donations</h2>
       <div className="rounded-md border">
         <Table>

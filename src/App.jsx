@@ -1,19 +1,20 @@
 import { RouterProvider } from "react-router";
 import { router } from "./router/router";
-import { ThemeProvider } from "./Providers/ThemeProvider";
-import AuthProvider from "./Providers/AuthProvider";
 import { Toaster } from "sonner";
+import { useAuth } from "./hooks/Auth";
+import Loader from "./Shared/Loader";
+import Skeleton from "react-loading-skeleton";
 
 function App() {
+  const currentUser =useAuth()
+  if (currentUser.loading) {
+    return <Loader/>
+  }
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <div className="w-full max-w-[1600px] mx-auto">
-           <Toaster position="top-center" />
-          <RouterProvider router={router} />
-        </div>
-      </AuthProvider>
-    </ThemeProvider>
+    <div className="w-full max-w-[1600px] mx-auto">
+      <Toaster position="top-center" />
+      <RouterProvider router={router} />
+    </div>
   );
 }
 

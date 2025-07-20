@@ -14,10 +14,10 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FaRegCalendarAlt } from "react-icons/fa";
 
 function DonationCard({ campaign }) {
-  const { _id, lastDate, petName, maxDonationAmount, petImage, donationRaised } = campaign;
+  const { _id, lastDate,paused, petName, maxDonationAmount, petImage, donationRaised } = campaign;
   console.log(campaign);
   return (
-    <Card className="w-full bg-secondary hover:scale-105 duration-400 xs:w-xs">
+    <Card className="w-full bg-secondary hover:scale-105 duration-400 xs:w-xs" data-aos="zoom-in">
       <div className="px-6">
         <img
           className="w-full rounded-xl object-cover object-center h-48"
@@ -42,7 +42,7 @@ function DonationCard({ campaign }) {
         </p>
         <p className="flex justify-start gap-2 items-center">
           <MdDeviceUnknown /> <span className="font-bold">Status:</span>{" "}
-          {new Date(lastDate) < new Date() ||
+          {paused?"paused":new Date(lastDate) < new Date() ||
                   donationRaised >= maxDonationAmount
                     ? "Closed"
                     : "Running"}
