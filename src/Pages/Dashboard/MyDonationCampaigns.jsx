@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import TableSkeleton from "./TableSkeleton";
 import {
   flexRender,
   getCoreRowModel,
@@ -136,7 +137,7 @@ const MyDonationCampaigns = () => {
     },
   });
 
-  if (isLoading) return <div>Loading donation campaigns...</div>;
+  if (isLoading) return <TableSkeleton columns={columns} />;
   if (isError) return <div>Error loading donation campaigns.</div>;
 
   return (

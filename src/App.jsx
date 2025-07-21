@@ -3,18 +3,29 @@ import { router } from "./router/router";
 import { Toaster } from "sonner";
 import { useAuth } from "./hooks/Auth";
 import Loader from "./Shared/Loader";
-import Skeleton from "react-loading-skeleton";
+import RoleProvider from "./Providers/RoleProvider";
+import { useEffect } from "react";
+import Aos from "aos";
 
 function App() {
-  const currentUser =useAuth()
+  const currentUser = useAuth();
+  
+
+  useEffect(() => {
+    Aos.refresh();
+  }, [currentUser.loading]);
+  
   if (currentUser.loading) {
-    return <Loader/>
+    return <Loader />;
   }
+
   return (
-    <div className="w-full max-w-[1600px] mx-auto">
-      <Toaster position="top-center" />
-      <RouterProvider router={router} />
-    </div>
+    <RoleProvider>
+      <div className="w-full max-w-[1600px] mx-auto">
+        <Toaster position="top-center" />
+        <RouterProvider router={router} />
+      </div>
+    </RoleProvider>
   );
 }
 

@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import TableSkeleton from "./TableSkeleton";
 import {
   flexRender,
   getCoreRowModel,
@@ -130,7 +131,7 @@ const handleRefund=async(paymentIntentId,id)=>{
     },
   });
 
-  if (isLoading) return <div>Loading donations...</div>;
+  if (isLoading) return <TableSkeleton columns={columns} />;
   if (isError) return <div>Error loading donations.</div>;
 
   return (

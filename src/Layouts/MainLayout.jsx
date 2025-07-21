@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Aos from "aos";
 import Navbar from "../Shared/Navbar";
 import { Outlet, useLocation } from "react-router";
 import Carousel from "@/Pages/HomePage/Carousel";
@@ -12,6 +13,7 @@ function MainLayout() {
       top: 0,
       behavior: "smooth",
     });
+    Aos.refresh();
   }, [location.pathname]);
   
   return (

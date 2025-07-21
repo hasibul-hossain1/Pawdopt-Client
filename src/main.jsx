@@ -35,7 +35,7 @@ createRoot(document.getElementById("root")).render(
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          <App />
+            <App />
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>

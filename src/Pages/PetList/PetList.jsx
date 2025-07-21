@@ -106,7 +106,7 @@ const PetList = () => {
           >
             {pets.map((pet) =>
               pet.adopted ? (
-                ""
+                null
               ) : (
                 <PetCard
                   key={pet._id}

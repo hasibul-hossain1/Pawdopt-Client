@@ -18,6 +18,10 @@ import PetDetails from "@/Pages/PetDetails/PetDetails";
 import DonationCampaign from "@/Pages/DonationCampaign/DonationCampaign";
 import DonationDetails from "@/Pages/DonationCampaign/DonationDetails";
 
+import AllUsers from "@/Pages/Dashboard/AllUsers";
+import AllPets from "@/Pages/Dashboard/AllPets";
+import AllDonations from "@/Pages/Dashboard/AllDonations";
+
 export const router=createBrowserRouter([
     {
         path:'/',
@@ -89,10 +93,18 @@ export const router=createBrowserRouter([
                 path:'edit-campaign/:id',
                 Component:EditCampaign
             },
-            // {
-            //     path:'view-donors/:id',
-            //     Component:ViewDonors
-            // }
+            {
+                path:'all-users',
+                Component:AllUsers
+            },
+            {
+                path:'all-pets',
+                Component:AllPets
+            },
+            {
+                path:'all-donations',
+                Component:AllDonations
+            }
         ]
     }
 ])

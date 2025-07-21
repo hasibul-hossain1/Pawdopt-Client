@@ -10,14 +10,16 @@ import lot from "../../assets/4.json";
 import { useFormik } from "formik";
 import axios from "axios";
 import { Progress } from "@/components/ui/progress";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { api } from "@/lib/api";
 import { Upload } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/Auth";
+import { Navigate, useLocation } from "react-router";
 
 function Register() {
+  const currentUser=useAuth()
+  const location=useLocation()
   const lottieRef = useRef();
-  const imageRef = useRef();
   const [imageURL, setImageURL] = useState("");
   const [progress, setProgress] = useState(0);
   const [imageError, setImageError] = useState("");
@@ -40,52 +42,44 @@ function Register() {
           "Invalid password. must use one lowercase one uppercase and one number and at least 6 character";
       return errors;
     },
-    onSubmit: (values, { resetForm }) => {
-      if (!imageRef.current.value) {
-        setImageError("You have to upload the image");
-        return;
-      }
+    onSubmit: async (values, { resetForm }) => {
       if (!imageURL) {
         setImageError("Image Upload Failed");
         return;
       }
-      createUser(values.email, values.password)
-        .then((res) => {
-          if (res) {
-            setFirebaseError("");
-            updateProfileUser({
-              displayName: values.displayName,
-              photoURL: imageURL || "",
-            });
-            toast.success("Registration successful!");
-          }
-        })
-        .then(() => {
-          api
+      try {
+        const res = await createUser(values.email, values.password)
+        if (res) {
+          setFirebaseError("");
+          await updateProfileUser({
+            displayName: values.displayName,
+            photoURL: imageURL || "",
+          })
+          toast.success("Registration successful!");
+          await api
             .post("/users", {
               name: values.displayName,
               email: values.email,
+              photoURL: imageURL
             })
-            .then((res) => toast.success("User data saved!"))
-            .catch((err) => toast.error("Failed to save user data: " + err.message));
-        })
-        .catch((err) => {
-          setFirebaseError(err?.message || "Invalid auth Error");
-          toast.error(err?.message || "Registration failed!");
-        });
-      resetForm();
-      if (imageRef.current.value || imageURL) {
-        imageRef.current.value = "";
-        setImageURL("");
-        setImageError("");
+          resetForm();
+          if (imageURL) {
+            setImageURL("");
+            setImageError("");
+          }
+        }
+      } catch (err) {
+        setFirebaseError(err?.message || "Invalid auth Error");
+        toast.error(err?.message || "Registration failed!");
       }
     },
-  });
-
+    }
+  );
+  
   const handleImage = async (e) => {
-    setProgress(33);
     setImageURL("");
     const file = e.target.files[0];
+    setProgress(33);
     if (!file) {
       toast.error("No file detected");
       return;
@@ -116,6 +110,10 @@ function Register() {
     }
   }, []);
 
+  if (currentUser.data) {
+    return <Navigate to={location.state || '/'}/>
+  }
+
   return (
     <section className="flex flex-col-reverse md:flex-row justify-center items-center h-screen">
       <Card className="p-8 rounded-lg w-full max-w-md" data-aos="slide-right">
@@ -143,16 +141,16 @@ function Register() {
           <div className="grid w-full max-w-sm items-center gap-3">
             <Label>Photo</Label>
             <div className="w-32 h-32 border-2 border-dashed rounded-lg flex items-center justify-center">
-                {imageURL ? (
-                  <img
-                    src={imageURL}
-                    alt="Pet preview"
-                    className="h-full w-full object-cover rounded-lg"
-                  />
-                ) : (
-                  <Upload className="h-8 w-8 text-gray-400" />
-                )}
-              </div>
+              {imageURL ? (
+                <img
+                  src={imageURL}
+                  alt="Pet preview"
+                  className="h-full w-full object-cover rounded-lg"
+                />
+              ) : (
+                <Upload className="h-8 w-8 text-gray-400" />
+              )}
+            </div>
             {progress === 0 ? (
               ""
             ) : (
@@ -162,13 +160,20 @@ function Register() {
               </>
             )}
             <Input
-              required
+              id="userImage"
               onChange={handleImage}
-              ref={imageRef}
               type="file"
               name="photoURL"
-              placeholder="Your name"
+              hidden
             />
+            <div>
+              <Button
+              type="button"
+                onClick={() => document.getElementById("userImage").click()}
+              >
+                Upload
+              </Button>
+            </div>
             {imageError && (
               <div className="text-red-500 text-sm">{imageError}</div>
             )}

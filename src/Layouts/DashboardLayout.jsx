@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Link, NavLink, Outlet } from "react-router";
+import React, { useState, useEffect } from "react";
+import { Link, NavLink, Outlet, useLocation } from "react-router";
+import Aos from "aos";
 import {
   PlusCircle,
   List,
@@ -9,6 +10,9 @@ import {
   Menu,
   X,
   PlusSquare,
+  Users,
+  ListChecks,
+  Landmark
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/Shared/Logo";
@@ -24,8 +28,27 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signOUtUser } from "../../firebase/firebasePanel";
 import { useAuth } from "@/hooks/Auth";
+import { useRole } from "@/hooks/Role";
 
-const navLinks = [
+const adminNavLinks = [
+  {
+    to: "/dashboard/all-users",
+    icon: <Users className="h-5 w-5" />,
+    text: "All Users",
+  },
+  {
+    to: "/dashboard/all-pets",
+    icon: <ListChecks className="h-5 w-5" />,
+    text: "All Pets",
+  },
+  {
+    to: "/dashboard/all-donations",
+    icon: <Landmark className="h-5 w-5" />,
+    text: "All Donations",
+  },
+];
+
+const userNavLinks = [
   {
     to: "/dashboard/add-pet",
     icon: <PlusCircle className="h-5 w-5" />,
@@ -60,11 +83,19 @@ const navLinks = [
 
 const DashboardLayout = () => {
   const currentUser = useAuth();
-  console.log(currentUser);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  // if (currentUser.loading) {
-  //  return "loading" 
-  // }
+  const role = useRole();
+  const location = useLocation();
+
+  const navLinks = role === 'admin' ? [...userNavLinks, ...adminNavLinks] : userNavLinks;
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    Aos.refresh();
+  }, [location.pathname]);
 
   const status = currentUser.data ? (
     <DropdownMenu>

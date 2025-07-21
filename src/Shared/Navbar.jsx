@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "./Logo";
 import { Menu } from "lucide-react";
 import { ModeToggle } from "./MoodToggle";
@@ -16,11 +16,16 @@ import { useAuth } from "@/hooks/Auth";
 
 function Navbar() {
   const currentUser = useAuth();
+  const [avatar,setAvatar]=useState('')
+
+  useEffect(()=>{
+    setAvatar(currentUser.data?.photoURL)
+  },[currentUser])
   const status = currentUser.data ? (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar className="size-12">
-          <AvatarImage src={currentUser.data.photoURL||"https://github.com/shadcn.png"} />
+          <AvatarImage src={avatar} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

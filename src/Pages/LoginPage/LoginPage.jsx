@@ -14,8 +14,13 @@ import { api } from "@/lib/api";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Navigate, useLocation, useNavigate } from "react-router";
+import { useAuth } from "@/hooks/Auth";
 
 function LoginPage() {
+  const navigate=useNavigate()
+  const location=useLocation()
+  const currentUser=useAuth()
   const [firebaseError, setFirebaseError] = useState("");
   const formik = useFormik({
     initialValues: {
@@ -36,28 +41,34 @@ function LoginPage() {
       signInUser(values.email, values.password)
         .then((res) => {
           toast.success("Logged in successfully!");
+          navigate(location.state || '/')
         })
         .catch((err) => {
           toast.error(err?.message || "Unexpected Error");
           setFirebaseError(err?.message || "Unexpected Error");
         });
-    },
-  });
+      },
+    });
 
+    
   const handleGoogleLogin = async () => {
     try {
       const data = await createUserWithGoogle();
       const user = data.user;
+      toast.success("Google login successful!");
       const res = await api.post("/users", {
         name: user.displayName,
         email: user.email,
+        photoURL:user.photoURL
       });
-      const result = await res.data;
-      toast.success("Google login successful!");
     } catch (error) {
-      toast.error(error.message || "Google login failed!");
+      console.log(error);
     }
   };
+
+  if (currentUser.data) {
+   navigate(location.state || '/')
+  }
 
   return (
     <section className="flex flex-col-reverse md:flex-row justify-center items-center h-screen">

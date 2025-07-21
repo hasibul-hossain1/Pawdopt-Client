@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { useDebounce } from "use-debounce";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const LIMIT = 10;
 
@@ -51,9 +51,6 @@ const DonationCampaign = () => {
 
   const pets = data?.pages.flatMap((page) => page.pets) || [];
   
-  useEffect(()=>{
-    console.log(data)
-  },[data])
   return (
     <section className="mt-4">
       <h2 data-aos="slide-right">Support a Life, Make a Difference</h2>

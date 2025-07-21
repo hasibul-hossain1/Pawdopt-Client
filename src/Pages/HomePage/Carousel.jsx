@@ -28,7 +28,7 @@ function Carousel() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const textAnimation = (title, description = "") => {
     return (
-      <div className="absolute top-4 xs:top-10 sm:top-[30%] flex justify-center items-center flex-col w-full z-10" data-aos="fade-up">
+      <div className="absolute top-4 xs:top-10 sm:top-[30%] flex justify-center items-center flex-col w-full z-10">
         <div className="max-w-4xl bg-accent/40 text-center p-4 rounded-lg">
         <BlurText
           className="text-sm sm:text-4xl text-primary font-play lg:text-7xl font-bold"
