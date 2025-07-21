@@ -5,6 +5,7 @@ import { Outlet, useLocation } from "react-router";
 import Carousel from "@/Pages/HomePage/Carousel";
 import Footer from "../Shared/Footer";
 
+
 function MainLayout() {
   const location = useLocation();
 
@@ -15,6 +16,7 @@ function MainLayout() {
     });
     Aos.refresh();
   }, [location.pathname]);
+
   
   return (
     <>

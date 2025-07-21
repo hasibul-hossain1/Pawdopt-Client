@@ -22,13 +22,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { signOUtUser } from "../../firebase/firebasePanel";
 import { useAuth } from "@/hooks/Auth";
 import { useRole } from "@/hooks/Role";
+
 
 const adminNavLinks = [
   {
@@ -81,6 +80,8 @@ const userNavLinks = [
   },
 ];
 
+
+
 const DashboardLayout = () => {
   const currentUser = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -128,6 +129,7 @@ const DashboardLayout = () => {
       </Link>
     </>
   );
+
 
   return (
     <div className="flex min-h-screen w-full bg-gray-100 dark:bg-gray-900">

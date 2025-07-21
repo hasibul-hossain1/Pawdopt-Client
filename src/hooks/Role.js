@@ -2,8 +2,9 @@ import { createContext, useContext } from "react"
 
 
 
-export const RoleContext=createContext('')
+export const RoleContext=createContext(null)
 
 export const useRole=()=>{
-    return useContext(RoleContext)
+    const result = useContext(RoleContext)
+    return result
 }

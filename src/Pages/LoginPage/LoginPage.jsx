@@ -50,7 +50,9 @@ function LoginPage() {
       },
     });
 
-    
+    if (currentUser.data) {
+      return <Navigate to={location.state || '/'}/>
+    }
   const handleGoogleLogin = async () => {
     try {
       const data = await createUserWithGoogle();
