@@ -13,10 +13,12 @@ import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/hooks/Auth";
 import { Calendar } from "@/components/ui/calendar";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 const CreateDonationCampaign = () => {
   const [imagePreview, setImagePreview] = useState("");
   const currentUser = useAuth();
+  const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
 
   const validate = (values) => {
@@ -58,10 +60,11 @@ const CreateDonationCampaign = () => {
         };
         console.log(payload);
         const res = await api.post("/create-donation", payload);
-        if (res.data.success) {
+        if (res.data) {
           toast.success('Donation campaign created successfully!');
           resetForm();
           setImagePreview("");
+          navigate("/dashboard/my-donation-campaigns");
         }
       } catch (error) {
         toast.error(error.message || "An error occurred");

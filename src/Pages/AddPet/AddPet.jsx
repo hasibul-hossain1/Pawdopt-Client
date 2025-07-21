@@ -14,6 +14,7 @@ import axios from "axios";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/hooks/Auth";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 const petCategories = [
   { value: "dog", label: "Dog" },
@@ -26,6 +27,7 @@ const petCategories = [
 const AddPet = () => {
   const [imagePreview, setImagePreview] = useState("");
   const currentUser=useAuth()
+  const navigate = useNavigate();
   const [imageFile, setImageFile] = useState(null);
   const [progress, setProgress] = useState(0);
 
@@ -86,6 +88,7 @@ const AddPet = () => {
       try {
         const res = await api.post('/pets', petData);
         toast.success(res.data.message);
+        navigate("/dashboard/my-added-pets");
       } catch (error) {
         toast.error("Error adding pet:", error.message);
         setFieldError("general", "An error occurred while adding the pet.");
