@@ -59,7 +59,7 @@ function PetDetails() {
       };
 
       try {
-        const res=await api.post("/adoption-requests", adoptionData);
+        await api.post("/adoption-requests", adoptionData);
         
         toast.success("Adoption request submitted successfully!");
         setIsDialogOpen(false); // Close the dialog on success
