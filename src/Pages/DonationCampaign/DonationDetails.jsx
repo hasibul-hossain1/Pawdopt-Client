@@ -56,8 +56,6 @@ function DonationDetails() {
   });
   const {
     data: campaigns,
-    isLoading: campaignsLoading,
-    isError: campaignsError,
   } = useQuery({
     queryKey: ["recommended-donations",id],
     queryFn:()=> fetchDonations(id),

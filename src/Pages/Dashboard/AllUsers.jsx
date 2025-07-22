@@ -61,7 +61,7 @@ const AllUsers = () => {
       toast.success('User ban status updated successfully!');
     },
     onError: (error) => {
-      toast.error('Failed to update ban status.');
+      toast.error('Failed to update ban status.'+error?.message);
     },
   });
 
