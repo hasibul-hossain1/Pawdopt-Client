@@ -52,7 +52,7 @@ const MyDonations = () => {
   });
 
 const handleRefund=async(paymentIntentId,id)=>{
-  console.log(paymentIntentId);
+  
   const res=await api.post('refund',{paymentIntentId})
   if (res.data.success) {
     api.patch(`/updateRefund/${id}`,{refund:true})
@@ -144,14 +144,22 @@ const handleRefund=async(paymentIntentId,id)=>{
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
+                    <TableHead
+                    key={header.id}
+                    onClick={header.column.getToggleSortingHandler()}
+                    className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                    {{
+                      asc: ' 🔼',
+                      desc: ' 🔽',
+                    }[header.column.getIsSorted()] ?? null}
+                  </TableHead>
                   );
                 })}
               </TableRow>

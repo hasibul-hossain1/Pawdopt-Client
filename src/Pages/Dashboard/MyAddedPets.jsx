@@ -64,7 +64,7 @@ const MyAddedPets = () => {
       toast.success('Pet deleted successfully!');
     },
     onError: (error) => {
-      toast.error('Failed to delete pet.', error.message);
+      toast.error('Failed to delete pet.' + error.message);
     },
   });
 
@@ -77,8 +77,7 @@ const MyAddedPets = () => {
       toast.success('Pet marked as adopted!');
     },
     onError: (error) => {
-      console.log(error);
-      toast.error('Failed to mark as adopted.', error.message);
+      toast.error('Failed to mark as adopted.' + error.message);
     },
   });
 

@@ -5,6 +5,7 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { useState } from "react";
+import { toast } from "sonner";
 
 
 export default function CheckoutForm({amount,setIsDialogOpen,userData,campaignId,refetch}) {
@@ -31,16 +32,16 @@ export default function CheckoutForm({amount,setIsDialogOpen,userData,campaignId
     });
 
     if (result.error) {
-      alert(result.error.message);
+      toast.error(result.error.message);
     } else {
       if (result.paymentIntent.status === "succeeded") {
         const saveData=await api.post('/donate',{campaignId,donatedBy:userData.email,amount,paymentIntentId:result.paymentIntent.id})
         if (saveData.data) {
           refetch()
-          alert("✅ Payment successful!");
+          toast.success("✅ Payment successful!");
           setIsDialogOpen(false)
         }else{
-          alert('payment error')
+          toast.error('payment error')
         }
       }
     }

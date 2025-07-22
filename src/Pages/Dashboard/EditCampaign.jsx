@@ -28,7 +28,7 @@ const EditCampaign = () => {
     queryKey:["campaign",id],
     queryFn:()=>fetchCampaign(id)
   })
-  console.log(data)
+  
   const [imagePreview, setImagePreview] = useState(null);
   const currentUser = useAuth();
   const [progress, setProgress] = useState(0);
@@ -74,7 +74,7 @@ const EditCampaign = () => {
           addedBy: currentUser.data.email,
           maxDonationAmount: parseInt(values.maxDonationAmount),
         };
-        console.log(payload);
+        
         const res = await api.put(`/single-donation-update/${id}`, payload);
         if (res.data.success) {
           toast.success('Donation campaign updated successfully!');
@@ -94,7 +94,7 @@ const EditCampaign = () => {
     const file = event.currentTarget.files[0];
     if (file) {
       if (!file.type.startsWith("image/")) {
-        return console.log("file type not matched");
+        toast.error("File type not matched");
       }
       setProgress(33);
       const formData = new FormData();
@@ -112,7 +112,7 @@ const EditCampaign = () => {
         setImagePreview(result);
         setProgress(100);
       } catch (error) {
-        console.log(error);
+        toast.error(error.message || "An error occurred");
       }
       setProgress(0);
     }

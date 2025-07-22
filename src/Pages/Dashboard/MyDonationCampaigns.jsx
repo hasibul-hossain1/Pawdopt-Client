@@ -52,12 +52,12 @@ const MyDonationCampaigns = () => {
     },
     enabled: !!email,
   });
-  console.log(campaigns);
+  
 
   const pauseCampaignMutation = useMutation({
     mutationFn: async (id) => {
       const res=await api.patch(`/campaign-pause/${id}`)
-      console.log(res.data);
+      
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["my-donation-campaigns"]);
@@ -150,14 +150,22 @@ const MyDonationCampaigns = () => {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
+                    <TableHead
+                    key={header.id}
+                    onClick={header.column.getToggleSortingHandler()}
+                    className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                    {{
+                      asc: ' 🔼',
+                      desc: ' 🔽',
+                    }[header.column.getIsSorted()] ?? null}
+                  </TableHead>
                   );
                 })}
               </TableRow>

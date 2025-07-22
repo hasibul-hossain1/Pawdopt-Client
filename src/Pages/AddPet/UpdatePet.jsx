@@ -13,7 +13,7 @@ import { api } from "@/lib/api";
 import axios from "axios";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/hooks/Auth";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 
 const petCategories = [
@@ -27,7 +27,8 @@ const petCategories = [
 
 const UpdatePet = () => {
   const {state:pet}=useLocation()
-  console.log(pet);
+  const navigate = useNavigate();
+  
   const [imagePreview, setImagePreview] = useState(pet.petImage);
   const currentUser=useAuth()
   const [progress, setProgress] = useState(0);
@@ -87,6 +88,7 @@ const UpdatePet = () => {
         const res = await api.put(`/update-pet/${pet._id}`, petData);
         if (res.data) {
           toast.success('Pet updated successfully');
+          navigate(-1);
         }
       } catch (error) {
         toast.error("Error updating pet:", error.message);
@@ -102,7 +104,7 @@ const UpdatePet = () => {
     const file = event.currentTarget.files[0];
     if (file) {
       if (!file.type.startsWith("image/")) {
-        return console.log('file type not matched');
+        toast.error('File type not matched');
       }
       setProgress(33);
       const formData = new FormData();
@@ -120,7 +122,7 @@ const UpdatePet = () => {
         setImagePreview(result);
         setProgress(100);
       } catch (error) {
-        console.log(error);
+        toast.error(error.message || 'An error occurred');
       }
       setProgress(0);
     }

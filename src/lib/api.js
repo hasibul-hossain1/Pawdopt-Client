@@ -1,10 +1,23 @@
 import axios from "axios";
+import { auth } from "../../firebase/firebase.init";
 
-export const api = axios.create({
-  baseURL: 'http://localhost:5000',
+const api = axios.create({
+  baseURL: 'https://pawdopt-pearl.vercel.app',
+  withCredentials:true
 });
 
-export const submitAdoptionRequest = async (adoptionData) => {
-  const res = await api.post("/adoption-requests", adoptionData);
-  return res.data;
-};
+
+api.interceptors.request.use(
+  async(config)=>{
+    const user=auth.currentUser
+    if (user) {
+      const idToken=await user.getIdToken()
+      config.headers.Authorization= `Bearer ${idToken}`
+    }
+    return config
+  },(error)=>{
+    return Promise.reject(error)
+  }
+)
+
+export {api}

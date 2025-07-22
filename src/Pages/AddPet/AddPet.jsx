@@ -102,7 +102,7 @@ const AddPet = () => {
     const file = event.currentTarget.files[0];
     if (file) {
       if (!file.type.startsWith("image/")) {
-        return console.log('file type not matched');
+        toast.error('File type not matched');
       }
       setProgress(33);
       setImageFile(file);
@@ -121,7 +121,7 @@ const AddPet = () => {
         setImagePreview(result);
         setProgress(100);
       } catch (error) {
-        console.log(error);
+        toast.error(error.message || 'An error occurred');
       }
       setProgress(0);
     }

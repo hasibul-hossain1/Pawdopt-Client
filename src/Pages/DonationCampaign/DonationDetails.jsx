@@ -33,7 +33,7 @@ const fetchPetById = async (id) => {
   return res.data;
 };
 const fetchDonations = async (id) => {
-  console.log(id);
+  
   const res = await api.get(`/recommended-donations/${id}`);
   return res.data;
 };
@@ -75,7 +75,6 @@ function DonationDetails() {
 if (user.loading) {
   return 'loading'
 }
-console.log(campaigns)
   return (
     <section className="mt-4">
       <Card className="w-full">
@@ -239,7 +238,7 @@ console.log(campaigns)
               .map((campaign) => (
                 <DonationCard key={campaign._id} campaign={campaign} />
               ))}
-              {console.log(campaigns)}
+              
         </div>
       </div>
     </section>

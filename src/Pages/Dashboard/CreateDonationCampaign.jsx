@@ -34,6 +34,9 @@ const CreateDonationCampaign = () => {
     if (!values.longDescription || values.longDescription === "<p><br></p>") {
       errors.longDescription = "Long description is required";
     }
+    if (!imagePreview) { // Add image validation here
+      errors.petImage = "Pet image is required";
+    }
     return errors;
   };
 
@@ -47,9 +50,13 @@ const CreateDonationCampaign = () => {
     },
     validate,
     onSubmit: async (values, { setSubmitting, setFieldError, resetForm }) => {
-      if (!imagePreview) {
-        return setFieldError("petImage", "Pet image is required");
+      
+
+      if (Object.keys(errors).length > 0) {
+        setSubmitting(false);
+        return; // Stop submission if there are any validation errors
       }
+      
       setSubmitting(true);
       try {
         const payload = {
@@ -58,8 +65,8 @@ const CreateDonationCampaign = () => {
           addedBy: currentUser.data.email,
           maxDonationAmount: parseInt(values.maxDonationAmount),
         };
-        console.log(payload);
-        const res = await api.post("/create-donation", payload);
+        
+        const res = await api.post("/create-donation-campaign", payload);
         if (res.data) {
           toast.success('Donation campaign created successfully!');
           resetForm();
@@ -79,7 +86,7 @@ const CreateDonationCampaign = () => {
     const file = event.currentTarget.files[0];
     if (file) {
       if (!file.type.startsWith("image/")) {
-        return console.log("file type not matched");
+        toast.error("File type not matched");
       }
       setProgress(33);
       const formData = new FormData();
@@ -97,7 +104,7 @@ const CreateDonationCampaign = () => {
         setImagePreview(result);
         setProgress(100);
       } catch (error) {
-        console.log(error);
+        toast.error(error.message || "An error occurred");
       }
       setProgress(0);
     }

@@ -21,6 +21,9 @@ import DonationDetails from "@/Pages/DonationCampaign/DonationDetails";
 import AllUsers from "@/Pages/Dashboard/AllUsers";
 import AllPets from "@/Pages/Dashboard/AllPets";
 import AllDonations from "@/Pages/Dashboard/AllDonations";
+import PrivateRoute from "@/Shared/PrivateRoute";
+import AdminRoute from "@/Shared/AdminRoute";
+import NotFoundPage from "@/Pages/NotFoundPage/NotFoundPage";
 
 export const router=createBrowserRouter([
     {
@@ -45,7 +48,7 @@ export const router=createBrowserRouter([
             },
             {
                 path:'/pets/:id',
-                Component:PetDetails
+                element:<PrivateRoute><PetDetails/></PrivateRoute>
             },
             {
                 path:'/donation-campaign',
@@ -53,57 +56,61 @@ export const router=createBrowserRouter([
             },
             {
                 path:'/donation-details/:id',
-                Component:DonationDetails
+                element:<PrivateRoute><DonationDetails/></PrivateRoute>
+            },
+            {
+                path:'*', // Catch-all route for 404
+                Component:NotFoundPage
             }
         ]
     },
     {
         path:'/dashboard',
-        Component:DashboardLayout,
+        element:<PrivateRoute><DashboardLayout/></PrivateRoute>,
         children:[
             {
-                path:'add-pet',
-                Component:AddPet
+                index:true,
+                element:<PrivateRoute><AddPet/></PrivateRoute>
             },
             {
                 path:'my-added-pets',
-                Component:MyAddedPets
+                element:<PrivateRoute><MyAddedPets/></PrivateRoute>
             },
             {
                 path:'adoption-request',
-                Component:AdoptionRequest
+                element:<PrivateRoute><AdoptionRequest/></PrivateRoute>
             },
             {
                 path:'create-donation-campaign',
-                Component:CreateDonationCampaign
+                element:<PrivateRoute><CreateDonationCampaign/></PrivateRoute>
             },
             {
                 path:'my-donation-campaigns',
-                Component:MyDonationCampaigns
+                element:<PrivateRoute><MyDonationCampaigns/></PrivateRoute>
             },
             {
                 path:'my-donations',
-                Component:MyDonations
+                element:<PrivateRoute><MyDonations/></PrivateRoute>
             },
             {
                 path:'update-pet/:id',
-                Component:UpdatePet
+                element:<PrivateRoute><UpdatePet/></PrivateRoute>
             },
             {
                 path:'edit-campaign/:id',
-                Component:EditCampaign
+                element:<PrivateRoute><EditCampaign/></PrivateRoute>
             },
             {
                 path:'all-users',
-                Component:AllUsers
+                element:<AdminRoute><AllUsers/></AdminRoute>
             },
             {
                 path:'all-pets',
-                Component:AllPets
+                element:<AdminRoute><AllPets/></AdminRoute>
             },
             {
                 path:'all-donations',
-                Component:AllDonations
+                element:<AdminRoute><AllDonations/></AdminRoute>
             }
         ]
     }

@@ -45,7 +45,7 @@ const AdoptionRequest = () => {
 
   const updateRequestStatus = useMutation({
     mutationFn: async ({ id, status }) => {
-      console.log(id);
+      
       const res = await api.patch(`/adoption-requests/${id}`, { status });
       return res.data;
     },
@@ -156,14 +156,22 @@ const AdoptionRequest = () => {
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
+                      <TableHead
+                    key={header.id}
+                    onClick={header.column.getToggleSortingHandler()}
+                    className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                    {{
+                      asc: ' 🔼',
+                      desc: ' 🔽',
+                    }[header.column.getIsSorted()] ?? null}
+                  </TableHead>
                     );
                   })}
                 </TableRow>

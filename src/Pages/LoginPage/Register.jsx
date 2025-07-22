@@ -3,10 +3,10 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Divider from "@/Shared/Divider";
 import { Label } from "@radix-ui/react-dropdown-menu";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Lottie from "lottie-react";
 import { createUser, updateProfileUser } from "../../../firebase/firebasePanel";
-import lot from "../../assets/4.json";
+import happyCat from '../../assets/lotties/Happy Cat.json'
 import { useFormik } from "formik";
 import axios from "axios";
 import { Progress } from "@/components/ui/progress";
@@ -19,7 +19,6 @@ import { Navigate, useLocation } from "react-router";
 function Register() {
   const currentUser=useAuth()
   const location=useLocation()
-  const lottieRef = useRef();
   const [imageURL, setImageURL] = useState("");
   const [progress, setProgress] = useState(0);
   const [imageError, setImageError] = useState("");
@@ -104,11 +103,6 @@ function Register() {
     setProgress(0);
   };
 
-  useEffect(() => {
-    if (lottieRef.current) {
-      lottieRef.current.setSpeed(0.2);
-    }
-  }, []);
 
   if (currentUser.data) {
     return <Navigate to={location.state || '/'}/>
@@ -218,14 +212,8 @@ function Register() {
           </div>
         </form>
       </Card>
-      <div data-aos="slide-left" className="w-full md:w-1/2">
-        <Lottie
-          lottieRef={lottieRef}
-          animationData={lot}
-          loop={true}
-          speed={0.1}
-          style={{ width: "100%", height: "auto" }}
-        />
+      <div data-aos="slide-left" className="w-full md:w-1/2 flex justify-center">
+        <Lottie animationData={happyCat} loop={true} className="w-full h-auto max-w-[200px] md:max-w-sm"/>
       </div>
     </section>
   );

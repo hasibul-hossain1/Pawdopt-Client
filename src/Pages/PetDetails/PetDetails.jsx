@@ -60,12 +60,11 @@ function PetDetails() {
 
       try {
         const res=await api.post("/adoption-requests", adoptionData);
-        console.log(res.data);
+        
         toast.success("Adoption request submitted successfully!");
         setIsDialogOpen(false); // Close the dialog on success
       } catch (error) {
-        console.error("Error submitting adoption request:", error);
-        toast.error("Failed to submit adoption request. Please try again.");
+        toast.error("Failed to submit adoption request. Please try again."+error?.message);
       }
     },
   });

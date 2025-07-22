@@ -49,18 +49,18 @@ const AllDonations = () => {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["all-donation-campaigns"],
+    queryKey: ["all-donation-campaigns", pagination.pageIndex, pagination.pageSize],
     queryFn: async () => {
-      const res = await api.get(`/donation-campaigns`);
+      const res = await api.get(`/all-donation-campaigns?page=${pagination.pageIndex + 1}&limit=${pagination.pageSize}`);
       return res.data;
     },
+    keepPreviousData: true,
   });
-  console.log(campaigns);
 
   const pauseCampaignMutation = useMutation({
     mutationFn: async (id) => {
       const res=await api.patch(`/campaign-pause/${id}`)
-      console.log(res.data);
+      
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["all-donation-campaigns"]);
@@ -88,7 +88,7 @@ const AllDonations = () => {
     {
       accessorKey: "serialNumber",
       header: "SL",
-      cell: (info) => info.row.index + 1,
+      cell: (info) => pagination.pageIndex * pagination.pageSize + info.row.index + 1,
       enableSorting: false,
     },
     {
@@ -163,13 +163,15 @@ const AllDonations = () => {
   ];
 
   const table = useReactTable({
-    data: campaigns || [],
+    data: campaigns?.data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onPaginationChange: setPagination,
     getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
+    pageCount: campaigns?.total ? Math.ceil(campaigns.total / pagination.pageSize) : -1,
     state: {
       sorting,
       pagination,
@@ -189,14 +191,22 @@ const AllDonations = () => {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
+                    <TableHead
+                    key={header.id}
+                    onClick={header.column.getToggleSortingHandler()}
+                    className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                    {{
+                      asc: ' 🔼',
+                      desc: ' 🔽',
+                    }[header.column.getIsSorted()] ?? null}
+                  </TableHead>
                   );
                 })}
               </TableRow>

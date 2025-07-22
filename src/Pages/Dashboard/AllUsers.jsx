@@ -48,8 +48,7 @@ const AllUsers = () => {
       toast.success('User role updated successfully!');
     },
     onError: (error) => {
-      console.error('Error updating user role:', error);
-      toast.error('Failed to update user role.');
+      toast.error('Failed to update user role.'+error?.message);
     },
   });
 
@@ -62,7 +61,6 @@ const AllUsers = () => {
       toast.success('User ban status updated successfully!');
     },
     onError: (error) => {
-      console.error('Error updating ban status:', error);
       toast.error('Failed to update ban status.');
     },
   });

@@ -12,7 +12,7 @@ import {
   PlusSquare,
   Users,
   ListChecks,
-  Landmark
+  Landmark,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/Shared/Logo";
@@ -27,7 +27,6 @@ import {
 import { signOUtUser } from "../../firebase/firebasePanel";
 import { useAuth } from "@/hooks/Auth";
 import { useRole } from "@/hooks/Role";
-
 
 const adminNavLinks = [
   {
@@ -49,7 +48,7 @@ const adminNavLinks = [
 
 const userNavLinks = [
   {
-    to: "/dashboard/add-pet",
+    to: "/dashboard",
     icon: <PlusCircle className="h-5 w-5" />,
     text: "Add a pet",
   },
@@ -80,15 +79,14 @@ const userNavLinks = [
   },
 ];
 
-
-
 const DashboardLayout = () => {
   const currentUser = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const role = useRole();
   const location = useLocation();
 
-  const navLinks = role === 'admin' ? [...userNavLinks, ...adminNavLinks] : userNavLinks;
+  const navLinks =
+    role === "admin" ? [...userNavLinks, ...adminNavLinks] : userNavLinks;
 
   useEffect(() => {
     window.scrollTo({
@@ -102,10 +100,7 @@ const DashboardLayout = () => {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar className="size-12">
-          {console.log(currentUser.data?.photoURL)}
-          <AvatarImage
-            src={currentUser?.data?.photoURL}
-          />
+          <AvatarImage src={currentUser?.data?.photoURL} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
@@ -130,7 +125,6 @@ const DashboardLayout = () => {
     </>
   );
 
-
   return (
     <div className="flex min-h-screen w-full bg-gray-100 dark:bg-gray-900">
       {/* Sidebar */}
@@ -151,20 +145,44 @@ const DashboardLayout = () => {
           </Button>
         </div>
         <nav className="mt-8 flex flex-col gap-2 px-4">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                  isActive ? "bg-gray-200 dark:bg-gray-700 font-semibold" : ""
-                }`
-              }
-            >
-              {link.icon}
-              {link.text}
-            </NavLink>
-          ))}
+          {navLinks.map((link) => {
+            if (link.to === "/dashboard") {
+              return (
+                <NavLink
+                  end
+                  key={link.to}
+                  to={link.to}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                      isActive
+                        ? "bg-gray-200 dark:bg-gray-700 font-semibold"
+                        : ""
+                    }`
+                  }
+                >
+                  {link.icon}
+                  {link.text}
+                </NavLink>
+              );
+            } else {
+              return (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                      isActive
+                        ? "bg-gray-200 dark:bg-gray-700 font-semibold"
+                        : ""
+                    }`
+                  }
+                >
+                  {link.icon}
+                  {link.text}
+                </NavLink>
+              );
+            }
+          })}
         </nav>
       </aside>
 

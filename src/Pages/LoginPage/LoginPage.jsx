@@ -5,8 +5,9 @@ import Divider from "@/Shared/Divider";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import Lottie from "lottie-react";
-import lot from "../../assets/2.json";
+import happyDog from "../../assets/lotties/Happy Dog.json";
 import {
+  createUserWithGithub,
   createUserWithGoogle,
   signInUser,
 } from "../../../firebase/firebasePanel";
@@ -18,9 +19,9 @@ import { Navigate, useLocation, useNavigate } from "react-router";
 import { useAuth } from "@/hooks/Auth";
 
 function LoginPage() {
-  const navigate=useNavigate()
-  const location=useLocation()
-  const currentUser=useAuth()
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentUser = useAuth();
   const [firebaseError, setFirebaseError] = useState("");
   const formik = useFormik({
     initialValues: {
@@ -39,37 +40,51 @@ function LoginPage() {
     onSubmit: (values) => {
       setFirebaseError("");
       signInUser(values.email, values.password)
-        .then((res) => {
+        .then(() => {
           toast.success("Logged in successfully!");
-          navigate(location.state || '/')
+          navigate(location.state || "/");
         })
         .catch((err) => {
           toast.error(err?.message || "Unexpected Error");
           setFirebaseError(err?.message || "Unexpected Error");
         });
-      },
-    });
+    },
+  });
 
-    if (currentUser.data) {
-      return <Navigate to={location.state || '/'}/>
-    }
+  if (currentUser.data) {
+    return <Navigate to={location.state || "/"} />;
+  }
   const handleGoogleLogin = async () => {
     try {
       const data = await createUserWithGoogle();
       const user = data.user;
       toast.success("Google login successful!");
-      const res = await api.post("/users", {
+      await api.post("/users", {
         name: user.displayName,
         email: user.email,
-        photoURL:user.photoURL
+        photoURL: user.photoURL,
       });
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
+    }
+  };
+  const handleGithubLogin = async () => {
+    try {
+      const data = await createUserWithGithub();
+      const user = data.user;
+      toast.success("Github login successful!");
+      await api.post("/users", {
+        name: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      });
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
   if (currentUser.data) {
-   navigate(location.state || '/')
+    navigate(location.state || "/");
   }
 
   return (
@@ -88,7 +103,7 @@ function LoginPage() {
               <FaGoogle />
               Google
             </Button>
-            <Button variant="ghost" className="border">
+            <Button variant="ghost" type="button" onClick={handleGithubLogin} className="border">
               <FaGithub />
               Github
             </Button>
@@ -132,12 +147,8 @@ function LoginPage() {
           </div>
         </form>
       </Card>
-      <div data-aos="slide-left" className="w-full md:w-1/2">
-        <Lottie
-          animationData={lot}
-          loop={true}
-          style={{ width: "100%", height: "auto" }}
-        />
+      <div data-aos="slide-left" className="w-full flex justify-center md:w-1/2">
+        <Lottie animationData={happyDog} loop={true} className="w-full h-auto max-w-xs sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg" />
       </div>
     </section>
   );

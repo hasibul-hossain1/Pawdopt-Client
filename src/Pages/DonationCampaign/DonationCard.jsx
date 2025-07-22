@@ -15,7 +15,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 
 function DonationCard({ campaign }) {
   const { _id, lastDate,paused, petName, maxDonationAmount, petImage, donationRaised } = campaign;
-  console.log(campaign);
+  
   return (
     <Card className="w-full bg-secondary hover:scale-105 duration-400 xs:w-xs" data-aos="zoom-in">
       <div className="px-6">

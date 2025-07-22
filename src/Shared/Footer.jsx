@@ -1,14 +1,13 @@
 import React from "react";
 import Logo from "./Logo";
 import { Separator } from "@/components/ui/separator";
+import { Link } from "react-router";
 
 const Footer = () => {
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Pet Listing", href: "/pets" },
-    { name: "Donation Campaigns", href: "/donations" },
-    { name: "About", href: "/about" },
-    { name: "Contact", href: "/contact" },
+    { name: "Pet Listing", href: "/pet-list" },
+    { name: "Donation Campaigns", href: "/donation-campaign" },
   ];
 
   return (
@@ -28,13 +27,13 @@ const Footer = () => {
             <h4 className="text-base font-semibold uppercase text-primary">Explore</h4>
             <div className="flex flex-col gap-1">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
+                  to={link.href}
                   className="text-sm hover:text-primary transition-colors"
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -42,9 +41,9 @@ const Footer = () => {
           <div className="space-y-2 mt-6 md:mt-0">
             <h4 className="text-base font-semibold uppercase text-primary">Connect</h4>
             <div className="text-sm space-y-1 text-muted-foreground">
-              <p>Email: support@pawdopt.com</p>
-              <p>Phone: +880-1234-567890</p>
-              <p>Location: Dhaka, Bangladesh</p>
+              <p>Email: hasibul.hossain.dev@gmail.com</p>
+              <p>Phone: +880-1701084479</p>
+              <p>Location: Jessore, Khulna, Bangladesh</p>
             </div>
           </div>
         </div>
