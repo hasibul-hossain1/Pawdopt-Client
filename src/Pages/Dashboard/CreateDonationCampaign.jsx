@@ -23,8 +23,8 @@ const CreateDonationCampaign = () => {
 
   const validate = (values) => {
     const errors = {};
-    if (!values.maxDonationAmount) {
-      errors.maxDonationAmount = "Max donation amount is required";
+    if (values.maxDonationAmount <= 0) {
+      errors.maxDonationAmount = "Max donation amount must be a positive number.";
     }
 
     if (!values.shortDescription) {
@@ -50,13 +50,6 @@ const CreateDonationCampaign = () => {
     },
     validate,
     onSubmit: async (values, { setSubmitting, setFieldError, resetForm }) => {
-      
-
-      if (Object.keys(errors).length > 0) {
-        setSubmitting(false);
-        return; // Stop submission if there are any validation errors
-      }
-      
       setSubmitting(true);
       try {
         const payload = {

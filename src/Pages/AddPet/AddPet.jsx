@@ -238,7 +238,7 @@ const AddPet = () => {
               value={petCategories.find(
                 (option) => option.value === formik.values.petCategory
               )}
-              className="mt-2"
+              className="mt-2 text-black"
               classNamePrefix="react-select"
             />
             {formik.errors.petCategory && formik.touched.petCategory && (

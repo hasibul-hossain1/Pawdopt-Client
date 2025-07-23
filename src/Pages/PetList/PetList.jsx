@@ -78,7 +78,7 @@ const PetList = () => {
           placeholder="🔍 Search pets"
         />
         <Select
-          className="w-[180px]"
+          className="w-[180px] text-black"
           options={options}
           value={category}
           onChange={setCategory}

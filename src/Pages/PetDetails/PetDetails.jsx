@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Loader from "@/Shared/Loader";
 
 const fetchPetById = async (id) => {
   const res = await api.get(`/pets/${id}`);
@@ -70,7 +71,7 @@ function PetDetails() {
   });
 
   if (isLoading) {
-    return <p className="text-center">Loading pet details...</p>;
+    return <Loader/>
   }
 
   if (isError) {
@@ -129,7 +130,16 @@ function PetDetails() {
               <div className="mt-6">
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button>Adopt Now</Button>
+                    <Button
+                      disabled={user?.data?.email === pet.addedBy}
+                      onClick={() => {
+                        if (user?.data?.email === pet.addedBy) {
+                          toast.error("You cannot adopt your own pet.");
+                        }
+                      }}
+                    >
+                      Adopt Now
+                    </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>

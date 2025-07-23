@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import CheckoutForm from "./CheckoutForm";
 import DonationCard from "./DonationCard";
+import Loader from "@/Shared/Loader";
 
 const stripePromise = loadStripe(
   "pk_test_51Rh11RRogI4oERhxVE2KcnH8WvnRv19TMWufnEKaNMT4TFwxtU7fktxgItxkef1JYedGqsI6lowWMJObH83O2SPa00vHxDAjMJ"
@@ -64,7 +65,7 @@ function DonationDetails() {
 
 
   if (isLoading) {
-    return <p className="text-center">Loading pet details...</p>;
+    return <Loader/>
   }
 
   if (isError) {
@@ -132,12 +133,16 @@ if (user.loading) {
                     <Button
                       disabled={
                         new Date(pet.lastDate) < new Date() ||
-                        pet.donationRaised >= pet.maxDonationAmount
-                          || pet.paused ? true
-                          : false
+                        pet.donationRaised >= pet.maxDonationAmount ||
+                        pet.paused ||
+                        user?.data?.email === pet.addedBy
                       }
                     >
-                      {pet?.paused?"Donation paused by user":"Donate"}
+                      {user?.data?.email === pet.addedBy
+                        ? "This is your campaign"
+                        : pet?.paused
+                        ? "Donation paused by user"
+                        : "Donate"}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px]">
