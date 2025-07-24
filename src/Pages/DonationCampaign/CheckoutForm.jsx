@@ -5,10 +5,12 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
 
 export default function CheckoutForm({amount,setIsDialogOpen,userData,campaignId,refetch}) {
+  const navigate=useNavigate()
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -40,6 +42,7 @@ export default function CheckoutForm({amount,setIsDialogOpen,userData,campaignId
           refetch()
           toast.success("✅ Payment successful!");
           setIsDialogOpen(false)
+          navigate('/dashboard/my-donations')
         }else{
           toast.error('payment error')
         }
