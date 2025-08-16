@@ -25,8 +25,8 @@ function LoginPage() {
   const [firebaseError, setFirebaseError] = useState("");
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: "admin@mail.com",
+      password: "Aa1234",
     },
     validate: (values) => {
       const errors = {};
@@ -115,6 +115,7 @@ function LoginPage() {
               required
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              value={formik.values.email}
               name="email"
               type="email"
               placeholder="your-mail@example.com"
@@ -129,6 +130,7 @@ function LoginPage() {
               required
               onChange={formik.handleChange}
               name="password"
+              value={formik.values.password}
               onBlur={formik.handleBlur}
               type="password"
               placeholder="Your password"
